@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import { User } from './entities/user.entity';
-import { hashPassword } from '../common/helpers/bcrypt.helper';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserInput } from '../dto/create-user.input';
+import { UpdateUserInput } from '../dto/update-user.input';
+import { User } from '../entities/user.entity';
+import {
+  comparePassword,
+  hashPassword,
+} from '../../common/helpers/bcrypt.helper';
 
 @Injectable()
 export class UsersService {
@@ -17,16 +20,18 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async findOne(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ id });
-  }
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException();
+    }
 
-  async findOneByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({ email });
+    return user;
   }
 
   async create(createUserInput: CreateUserInput): Promise<User> {
     const { name, email, password, phoneNumber, avatar } = createUserInput;
+
     const passwordHashed = await hashPassword(password);
 
     return this.userRepository.save({
@@ -42,6 +47,9 @@ export class UsersService {
     const { name, email, phoneNumber, avatar } = updateUserInput;
 
     const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException();
+    }
 
     return this.userRepository.save({
       ...user,
@@ -52,7 +60,35 @@ export class UsersService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    await this.userRepository.softDelete({ id });
+
+    return user;
+  }
+
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ email });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
+  async findOneByEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<User> {
+    const user = await this.userRepository.findOne({ email });
+    if (!user || !(await comparePassword(user.password, password))) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 }
