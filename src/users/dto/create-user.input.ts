@@ -2,6 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsUrl,
   MinLength,
@@ -26,10 +27,12 @@ export class CreateUserInput {
   password: string;
 
   @Field({ nullable: true })
+  @IsOptional()
   @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
   phoneNumber?: string;
 
   @Field({ nullable: true })
+  @IsOptional()
   @IsUrl()
   avatar?: string;
 }

@@ -10,15 +10,33 @@ type User {
   avatar: String!
 }
 
+type Account {
+  id: String!
+  userId: String!
+  name: String!
+}
+
+type Token {
+  accessToken: String!
+  expiresAt: Int!
+  refreshToken: String
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
+  accounts: [Account!]!
+  account(id: String!): Account!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
+  createToken(createTokenInput: CreateTokenInput!): Token!
+  createAccount(createAccountInput: CreateAccountInput!): Account!
+  updateAccount(updateAccountInput: UpdateAccountInput!): Account!
+  removeAccount(id: String!): Account!
 }
 
 input CreateUserInput {
@@ -35,4 +53,18 @@ input UpdateUserInput {
   email: String!
   phoneNumber: String
   avatar: String
+}
+
+input CreateTokenInput {
+  username: String!
+  password: String!
+}
+
+input CreateAccountInput {
+  name: String!
+}
+
+input UpdateAccountInput {
+  name: String
+  id: String!
 }

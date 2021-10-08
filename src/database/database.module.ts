@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { User } from '../users/entities/user.entity';
-import { AccessToken } from 'src/auth/entities/access-token.entity';
-import { PasswordReset } from 'src/auth/entities/password-reset.entity';
-import { RefreshToken } from 'src/auth/entities/refresh-token.entity';
+import { AccessToken } from '../auth/access-tokens/entities/access-token.entity';
+import { PasswordReset } from '../auth/entities/password-reset.entity';
+import { RefreshToken } from '../auth/refresh-tokens/entities/refresh-token.entity';
+import { Account } from '../accounts/entities/account.entity';
 
 @Module({
   imports: [
@@ -20,10 +21,10 @@ import { RefreshToken } from 'src/auth/entities/refresh-token.entity';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         namingStrategy: new SnakeNamingStrategy(),
-        synchronize: true,
+        synchronize: configService.get<string>('NODE_ENV') == 'local',
         dropSchema: false,
         logging: false,
-        entities: [AccessToken, PasswordReset, RefreshToken, User],
+        entities: [Account, AccessToken, PasswordReset, RefreshToken, User],
         timezone: 'UTC',
       }),
     }),

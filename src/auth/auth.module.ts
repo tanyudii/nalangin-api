@@ -1,17 +1,28 @@
 import { Module, Provider } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccessToken } from './entities/access-token.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtExpiresIn, jwtSecret } from '../common/constants/jwt.constant';
+import { AccessToken } from './access-tokens/entities/access-token.entity';
 import { PasswordReset } from './entities/password-reset.entity';
-import { RefreshToken } from './entities/refresh-token.entity';
-import { AccessTokensService } from './services/access-tokens/access-tokens.service';
-import { AuthService } from './services/auth-service/auth.service';
-import { PasswordResetsService } from './services/password-resets/password-resets.service';
-import { RefreshTokensService } from './services/refresh-tokens/refresh-tokens.service';
+import { RefreshToken } from './refresh-tokens/entities/refresh-token.entity';
+import { TokensResolver } from './resolvers/tokens/tokens.resolver';
+import { TokensService } from './services/tokens/tokens.service';
+import { AccessTokensService } from './access-tokens/services/access-tokens.service';
+import { PasswordResetsService } from './password-resets/services/password-resets.service';
+import { RefreshTokensService } from './refresh-tokens/services/refresh-tokens.service';
+import { UsersModule } from '../users/users.module';
+import { AccessTokensModule } from './access-tokens/access-tokens.module';
+import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
+import { PasswordResetsModule } from './password-resets/password-resets.module';
 
 const providers: Provider[] = [
   {
-    provide: AuthService.name,
-    useClass: AuthService,
+    provide: TokensResolver.name,
+    useClass: TokensResolver,
+  },
+  {
+    provide: TokensService.name,
+    useClass: TokensService,
   },
   {
     provide: AccessTokensService.name,
@@ -30,6 +41,14 @@ const providers: Provider[] = [
 @Module({
   imports: [
     TypeOrmModule.forFeature([AccessToken, RefreshToken, PasswordReset]),
+    JwtModule.register({
+      secret: jwtSecret,
+      signOptions: { expiresIn: jwtExpiresIn },
+    }),
+    UsersModule,
+    AccessTokensModule,
+    RefreshTokensModule,
+    PasswordResetsModule,
   ],
   providers: [...providers],
 })
