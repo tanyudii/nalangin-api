@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - staging
-      -
+
 jobs:
   app-tests:
     name: Setup CI
