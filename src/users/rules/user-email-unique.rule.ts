@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 
 export function IsUserEmailUnique(validationOptions?: ValidationOptions) {
@@ -22,10 +22,7 @@ export function IsUserEmailUnique(validationOptions?: ValidationOptions) {
 @ValidatorConstraint({ name: 'userEmailUnique', async: true })
 @Injectable()
 export class UserEmailUnique implements ValidatorConstraintInterface {
-  constructor(
-    @Inject(UsersService.name)
-    protected readonly usersService: UsersService,
-  ) {}
+  constructor(protected readonly usersService: UsersService) {}
 
   async validate(value: any, args: ValidationArguments): Promise<boolean> {
     try {

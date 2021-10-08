@@ -11,13 +11,7 @@ describe('UsersResolver', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [DatabaseModule, TypeOrmModule.forFeature([User])],
-      providers: [
-        {
-          provide: UsersService.name,
-          useClass: UsersService,
-        },
-        UsersResolver,
-      ],
+      providers: [UsersService, UsersResolver],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);

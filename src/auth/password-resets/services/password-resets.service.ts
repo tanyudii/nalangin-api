@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PasswordReset } from '../../entities/password-reset.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

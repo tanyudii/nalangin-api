@@ -1,5 +1,4 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Inject } from '@nestjs/common';
 import { AccountsService } from '../services/accounts.service';
 import { Account } from '../entities/account.entity';
 import { CreateAccountInput } from '../dto/create-account.input';

@@ -29,48 +29,6 @@ export class UsersService {
     return user;
   }
 
-  async create(createUserInput: CreateUserInput): Promise<User> {
-    const { name, email, password, phoneNumber, avatar } = createUserInput;
-
-    const passwordHashed = await hashPassword(password);
-
-    return this.userRepository.save({
-      name,
-      email,
-      password: passwordHashed,
-      phoneNumber,
-      avatar,
-    });
-  }
-
-  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
-    const { name, email, phoneNumber, avatar } = updateUserInput;
-
-    const user = await this.userRepository.findOne({ id });
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    return this.userRepository.save({
-      ...user,
-      name,
-      email,
-      phoneNumber,
-      avatar,
-    });
-  }
-
-  async remove(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ id });
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    await this.userRepository.softDelete({ id });
-
-    return user;
-  }
-
   async findOneByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({ email });
     if (!user) {
@@ -100,6 +58,47 @@ export class UsersService {
     if (!user || !(await comparePassword(user.password, password))) {
       throw new NotFoundException();
     }
+
+    return user;
+  }
+
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    const { name, email, password, phoneNumber, avatar } = createUserInput;
+
+    const passwordHashed = await hashPassword(password);
+
+    return this.userRepository.save({
+      name,
+      email,
+      password: passwordHashed,
+      phoneNumber,
+      avatar,
+    });
+  }
+
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const { name, email, phoneNumber, avatar } = updateUserInput;
+    return this.userRepository.save({
+      ...user,
+      name,
+      email,
+      phoneNumber,
+      avatar,
+    });
+  }
+
+  async remove(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    await this.userRepository.softDelete({ id });
 
     return user;
   }

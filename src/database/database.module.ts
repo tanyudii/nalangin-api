@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { User } from '../users/entities/user.entity';
 import { AccessToken } from '../auth/access-tokens/entities/access-token.entity';
-import { PasswordReset } from '../auth/entities/password-reset.entity';
+import { PasswordReset } from '../auth/password-resets/entities/password-reset.entity';
 import { RefreshToken } from '../auth/refresh-tokens/entities/refresh-token.entity';
 import { Account } from '../accounts/entities/account.entity';
 

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordResetsService } from './password-resets.service';
 import { DatabaseModule } from '../../../database/database.module';
-import { PasswordReset } from '../../entities/password-reset.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 
 describe('PasswordResetsService', () => {
   let service: PasswordResetsService;

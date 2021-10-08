@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAccountInput } from '../dto/create-account.input';
@@ -12,23 +12,52 @@ export class AccountsService {
     private readonly accountRepository: Repository<Account>,
   ) {}
 
-  create(createAccountInput: CreateAccountInput) {
-    return 'This action adds a new account';
+  async findAll(): Promise<Account[]> {
+    return this.accountRepository.find();
   }
 
-  findAll() {
-    return `This action returns all accounts`;
+  async findOne(id: string): Promise<Account> {
+    const account = await this.accountRepository.findOne({ id });
+    if (!account) {
+      throw new NotFoundException();
+    }
+
+    return account;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} account`;
+  async create(createAccountInput: CreateAccountInput): Promise<Account> {
+    const { userId, name } = createAccountInput;
+    return this.accountRepository.save({
+      userId,
+      name,
+    });
   }
 
-  update(id: string, updateAccountInput: UpdateAccountInput) {
-    return `This action updates a #${id} account`;
+  async update(
+    id: string,
+    updateAccountInput: UpdateAccountInput,
+  ): Promise<Account> {
+    const account = await this.accountRepository.findOne({ id });
+    if (!account) {
+      throw new NotFoundException();
+    }
+
+    const { userId, name } = updateAccountInput;
+    return this.accountRepository.save({
+      ...account,
+      userId,
+      name,
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} account`;
+  async remove(id: string): Promise<Account> {
+    const account = await this.accountRepository.findOne({ id });
+    if (!account) {
+      throw new NotFoundException();
+    }
+
+    await this.accountRepository.softDelete({ id });
+
+    return account;
   }
 }

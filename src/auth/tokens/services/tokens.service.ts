@@ -1,15 +1,14 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as moment from 'moment';
-import { Token } from '../../entities/token.entity';
+import { Token } from '../entities/token.entity';
 import { AccessTokensService } from '../../access-tokens/services/access-tokens.service';
 import { RefreshTokensService } from '../../refresh-tokens/services/refresh-tokens.service';
-import { CreateTokenInput } from '../../dto/create-token.input';
+import { CreateTokenInput } from '../dto/create-token.input';
 import { AccessToken } from '../../access-tokens/entities/access-token.entity';
 import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity';
 import { UsersService } from '../../../users/services/users.service';
@@ -18,11 +17,8 @@ import { UsersService } from '../../../users/services/users.service';
 export class TokensService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(UsersService.name)
     private readonly usersService: UsersService,
-    @Inject(AccessTokensService.name)
     private readonly accessTokensService: AccessTokensService,
-    @Inject(RefreshTokensService.name)
     private readonly refreshTokensService: RefreshTokensService,
   ) {}
 
