@@ -1,11 +1,11 @@
-name: PR WorkFlow
+name: Push WorkFlow
 
 on:
-  pull_request:
+  push:
     branches:
       - master
       - staging
-
+      -
 jobs:
   app-tests:
     name: Setup CI
