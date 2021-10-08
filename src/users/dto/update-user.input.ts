@@ -17,11 +17,11 @@ export class UpdateUserInput {
   @IsUserEmailUnique()
   email: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
-  phoneNumber: string;
+  phoneNumber?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsUrl()
-  avatar: string;
+  avatar?: string;
 }

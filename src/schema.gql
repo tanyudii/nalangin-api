@@ -25,14 +25,14 @@ input CreateUserInput {
   name: String!
   email: String!
   password: String!
-  phoneNumber: String!
-  avatar: String!
+  phoneNumber: String
+  avatar: String
 }
 
 input UpdateUserInput {
   id: Int!
   name: String!
   email: String!
-  phoneNumber: String!
-  avatar: String!
+  phoneNumber: String
+  avatar: String
 }
