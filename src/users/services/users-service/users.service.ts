@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserInput } from '../dto/create-user.input';
-import { UpdateUserInput } from '../dto/update-user.input';
-import { User } from '../entities/user.entity';
+import { CreateUserInput } from '../../dto/create-user.input';
+import { UpdateUserInput } from '../../dto/update-user.input';
+import { User } from '../../entities/user.entity';
 import {
   comparePassword,
   hashPassword,
-} from '../../common/helpers/bcrypt.helper';
+} from '../../../common/helpers/bcrypt.helper';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +20,7 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ id });
     if (!user) {
       throw new NotFoundException();
@@ -43,7 +43,7 @@ export class UsersService {
     });
   }
 
-  async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
     const { name, email, phoneNumber, avatar } = updateUserInput;
 
     const user = await this.userRepository.findOne({ id });
@@ -60,7 +60,7 @@ export class UsersService {
     });
   }
 
-  async remove(id: number): Promise<User> {
+  async remove(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ id });
     if (!user) {
       throw new NotFoundException();

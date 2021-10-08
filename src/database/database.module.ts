@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { User } from '../users/entities/user.entity';
+import { AccessToken } from 'src/auth/entities/access-token.entity';
+import { PasswordReset } from 'src/auth/entities/password-reset.entity';
+import { RefreshToken } from 'src/auth/entities/refresh-token.entity';
 
 @Module({
   imports: [
@@ -20,7 +23,7 @@ import { User } from '../users/entities/user.entity';
         synchronize: true,
         dropSchema: false,
         logging: false,
-        entities: [User],
+        entities: [AccessToken, PasswordReset, RefreshToken, User],
         timezone: 'UTC',
       }),
     }),

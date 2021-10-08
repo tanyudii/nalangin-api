@@ -4,8 +4,8 @@ import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
 
 @InputType()
 export class UpdateUserInput {
-  @Field(() => Int)
-  id: number;
+  @Field()
+  id: string;
 
   @Field()
   @IsNotEmpty()

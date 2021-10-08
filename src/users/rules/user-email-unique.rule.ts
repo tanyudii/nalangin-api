@@ -6,7 +6,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { UsersService } from '../services/users.service';
+import { UsersService } from '../services/users-service/users.service';
 
 export function IsUserEmailUnique(validationOptions?: ValidationOptions) {
   return (object: any, propertyName: string) => {
