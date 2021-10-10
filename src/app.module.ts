@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { join } from 'path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { join } from 'path';
+import { DatabaseModule } from './@database/database.module';
 import { AccountsModule } from './accounts/accounts.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -14,9 +14,9 @@ import { AccountsModule } from './accounts/accounts.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     DatabaseModule,
-    UsersModule,
-    AuthModule,
     AccountsModule,
+    AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

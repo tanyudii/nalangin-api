@@ -12,12 +12,12 @@ export class AccountsService {
     private readonly accountRepository: Repository<Account>,
   ) {}
 
-  async findAll(): Promise<Account[]> {
-    return this.accountRepository.find();
+  async findAll(userId: string): Promise<Account[]> {
+    return this.accountRepository.find({ userId });
   }
 
-  async findOne(id: string): Promise<Account> {
-    const account = await this.accountRepository.findOne({ id });
+  async findOne(userId: string, id: string): Promise<Account> {
+    const account = await this.accountRepository.findOne({ userId, id });
     if (!account) {
       throw new NotFoundException();
     }
@@ -25,8 +25,11 @@ export class AccountsService {
     return account;
   }
 
-  async create(createAccountInput: CreateAccountInput): Promise<Account> {
-    const { userId, name } = createAccountInput;
+  async create(
+    userId: string,
+    createAccountInput: CreateAccountInput,
+  ): Promise<Account> {
+    const { name } = createAccountInput;
     return this.accountRepository.save({
       userId,
       name,
@@ -34,15 +37,16 @@ export class AccountsService {
   }
 
   async update(
+    userId: string,
     id: string,
     updateAccountInput: UpdateAccountInput,
   ): Promise<Account> {
-    const account = await this.accountRepository.findOne({ id });
+    const account = await this.accountRepository.findOne({ userId, id });
     if (!account) {
       throw new NotFoundException();
     }
 
-    const { userId, name } = updateAccountInput;
+    const { name } = updateAccountInput;
     return this.accountRepository.save({
       ...account,
       userId,
@@ -50,8 +54,8 @@ export class AccountsService {
     });
   }
 
-  async remove(id: string): Promise<Account> {
-    const account = await this.accountRepository.findOne({ id });
+  async remove(userId: string, id: string): Promise<Account> {
+    const account = await this.accountRepository.findOne({ userId, id });
     if (!account) {
       throw new NotFoundException();
     }

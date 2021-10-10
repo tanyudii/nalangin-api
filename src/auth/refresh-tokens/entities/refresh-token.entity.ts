@@ -19,16 +19,16 @@ export class RefreshToken {
   @Column({ type: 'uuid' })
   accessTokenId: string;
 
-  @Column({ type: 'tinyint', default: 0 })
+  @Column({ type: 'smallint', default: 0 })
   revoked: boolean;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'datetime' })
   expiresAt: Date;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @OneToOne(() => AccessToken, (obj) => obj.refreshToken, {

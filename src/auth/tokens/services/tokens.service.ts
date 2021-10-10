@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as moment from 'moment';
 import { Token } from '../entities/token.entity';
@@ -12,6 +8,8 @@ import { CreateTokenInput } from '../dto/create-token.input';
 import { AccessToken } from '../../access-tokens/entities/access-token.entity';
 import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity';
 import { UsersService } from '../../../users/services/users.service';
+import { isEmail } from '../../../@common/helpers/validate.helper';
+import { CreateTokenByRefreshTokenInput } from '../dto/create-token-by-refresh-token.input';
 
 @Injectable()
 export class TokensService {
@@ -25,20 +23,21 @@ export class TokensService {
   async create(createTokenInput: CreateTokenInput): Promise<Token> {
     const { username, password } = createTokenInput;
 
-    let user = null;
+    let exceptionUser;
+    let user;
 
     try {
-      user = this.isEmail(username)
+      user = isEmail(username)
         ? await this.usersService.findOneByEmailAndPassword(username, password)
         : await this.usersService.findOneByPhoneAndPassword(username, password);
     } catch (e) {
-      if (e instanceof NotFoundException) {
-        throw new BadRequestException(
-          'These credentials do not match our records.',
-        );
-      }
+      exceptionUser = e;
+    }
 
-      throw e;
+    if (exceptionUser || !user) {
+      throw new BadRequestException(
+        'These credentials do not match our records.',
+      );
     }
 
     const accessToken = await this.accessTokensService.create({
@@ -55,11 +54,55 @@ export class TokensService {
     return this.tokenFactory(accessToken, refreshToken);
   }
 
+  async createByRefreshToken(
+    createTokenByRefreshInput: CreateTokenByRefreshTokenInput,
+  ): Promise<Token> {
+    const { accessToken, refreshToken } = createTokenByRefreshInput;
+
+    let decodedAccessToken;
+    let decodedRefreshToken;
+
+    try {
+      decodedAccessToken = await this.jwtService.verifyAsync(accessToken, {
+        ignoreExpiration: true,
+      });
+
+      decodedRefreshToken = await this.jwtService.verifyAsync(refreshToken);
+    } catch (e) {
+      throw new BadRequestException(
+        'These credentials do not match our records.',
+      );
+    }
+
+    const isValidRefreshToken = await this.refreshTokensService.isValidExpiry(
+      decodedRefreshToken.jti,
+      decodedAccessToken.jti,
+    );
+
+    if (!isValidRefreshToken) {
+      throw new BadRequestException(
+        'These credentials do not match our records.',
+      );
+    }
+
+    const newAccessToken = await this.accessTokensService.create({
+      userId: decodedRefreshToken.sub,
+      expiresAt: this.generateAccessTokenExpiresAt(),
+    });
+
+    await this.refreshTokensService.updateAccessToken(
+      decodedRefreshToken.jti,
+      newAccessToken.id,
+    );
+
+    return this.tokenFactory(newAccessToken);
+  }
+
   async tokenFactory(accessToken: AccessToken, refreshToken?: RefreshToken) {
     const token = new Token();
-    token.expiresAt = Math.ceil(accessToken.expiresAt.valueOf() / 1000);
+    token.expiresAt = Math.round(accessToken.expiresAt.valueOf() / 1000);
 
-    const currentTime = Math.ceil(new Date().valueOf() / 1000);
+    const currentTime = Math.round(new Date().valueOf() / 1000);
     token.accessToken = this.jwtService.sign({
       jti: accessToken.id,
       nbf: currentTime,
@@ -67,10 +110,13 @@ export class TokensService {
     });
 
     if (refreshToken) {
+      const expires = moment.duration(
+        moment(refreshToken.expiresAt).diff(moment()),
+      );
       token.refreshToken = await this.jwtService.signAsync(
         {},
         {
-          expiresIn: Math.ceil(refreshToken.expiresAt.valueOf() / 1000),
+          expiresIn: Math.round(expires.asSeconds()),
           jwtid: refreshToken.id,
           subject: accessToken.userId,
         },
@@ -81,18 +127,10 @@ export class TokensService {
   }
 
   generateAccessTokenExpiresAt(): Date {
-    const date = moment().add(8, 'hours');
-    return date.utc().toDate();
+    return moment().utc().add(8, 'hours').toDate();
   }
 
   generateRefreshTokenExpiresAt(): Date {
-    const date = moment().add(30, 'days');
-    return date.utc().toDate();
-  }
-
-  isEmail(email: string): boolean {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+    return moment().utc().add(30, 'days').toDate();
   }
 }

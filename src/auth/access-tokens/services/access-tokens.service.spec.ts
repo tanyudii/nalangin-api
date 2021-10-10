@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessTokensService } from './access-tokens.service';
-import { DatabaseModule } from '../../../database/database.module';
+import { DatabaseModule } from '../../../@database/database.module';
 import { AccessToken } from '../entities/access-token.entity';
 
 describe('AccessTokensService', () => {

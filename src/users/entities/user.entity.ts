@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @ObjectType()
 @Entity({ name: 'users' })
@@ -23,6 +24,7 @@ export class User {
   @Column({ unique: true })
   email?: string;
 
+  @Exclude()
   @Column({ nullable: true })
   password?: string;
 
@@ -34,12 +36,14 @@ export class User {
   @Column({ nullable: true })
   avatar?: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @Field(() => Date)
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @Field(() => Date)
+  @UpdateDateColumn()
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: 'timestamp' })
+  @DeleteDateColumn()
   deletedAt: Date;
 }

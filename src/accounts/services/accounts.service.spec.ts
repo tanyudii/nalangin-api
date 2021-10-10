@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AccountsService } from './accounts.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from '../entities/account.entity';
-import { DatabaseModule } from '../../database/database.module';
+import { DatabaseModule } from '../../@database/database.module';
 
 describe('AccountsService', () => {
   let service: AccountsService;

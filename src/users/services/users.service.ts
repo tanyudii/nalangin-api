@@ -7,7 +7,7 @@ import { User } from '../entities/user.entity';
 import {
   comparePassword,
   hashPassword,
-} from '../../common/helpers/bcrypt.helper';
+} from '../../@common/helpers/bcrypt.helper';
 
 @Injectable()
 export class UsersService {
@@ -89,6 +89,20 @@ export class UsersService {
       email,
       phoneNumber,
       avatar,
+    });
+  }
+
+  async updatePassword(id: string, password: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const passwordHashed = await hashPassword(password);
+
+    return this.userRepository.save({
+      ...user,
+      password: passwordHashed,
     });
   }
 

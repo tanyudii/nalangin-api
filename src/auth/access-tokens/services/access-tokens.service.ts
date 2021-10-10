@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { AccessToken } from '../entities/access-token.entity';
 import { CreateAccessTokenDto } from '../dto/create-access-token.dto';
 
@@ -19,5 +19,15 @@ export class AccessTokensService {
       userId,
       expiresAt,
     });
+  }
+
+  async isValidExpiry(accessTokenId: string): Promise<boolean> {
+    return !!(await this.accessTokenRepository.findOne({
+      where: {
+        id: accessTokenId,
+        revoked: false,
+        expiresAt: MoreThan(new Date()),
+      },
+    }));
   }
 }

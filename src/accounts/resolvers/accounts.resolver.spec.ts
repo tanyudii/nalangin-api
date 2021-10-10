@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AccountsResolver } from './accounts.resolver';
 import { AccountsService } from '../services/accounts.service';
-import { DatabaseModule } from '../../database/database.module';
+import { DatabaseModule } from '../../@database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from '../entities/account.entity';
 

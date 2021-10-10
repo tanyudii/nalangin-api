@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TokensResolver } from './tokens.resolver';
-import { DatabaseModule } from '../../../database/database.module';
+import { DatabaseModule } from '../../../@database/database.module';
 import { JwtModule } from '@nestjs/jwt';
 import {
   jwtExpiresIn,
   jwtSecret,
-} from '../../../common/constants/jwt.constant';
+} from '../../../@common/constants/jwt.constant';
 import { UsersModule } from '../../../users/users.module';
 import { AccessTokensModule } from '../../access-tokens/access-tokens.module';
 import { RefreshTokensModule } from '../../refresh-tokens/refresh-tokens.module';

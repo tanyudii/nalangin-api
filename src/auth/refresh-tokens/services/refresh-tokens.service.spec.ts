@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RefreshTokensService } from './refresh-tokens.service';
-import { DatabaseModule } from '../../../database/database.module';
+import { DatabaseModule } from '../../../@database/database.module';
 import { RefreshToken } from '../entities/refresh-token.entity';
 
 describe('RefreshTokensService', () => {

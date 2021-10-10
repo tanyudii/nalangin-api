@@ -7,7 +7,7 @@ import {
   patchTypeORMRepositoryWithBaseRepository,
 } from 'typeorm-transactional-cls-hooked';
 import { AppModule } from './app.module';
-import { CustomValidationPipe } from './common/pipes/custom-validation.pipe';
+import { CustomValidationPipe } from './@common/pipes/custom-validation.pipe';
 
 initializeTransactionalContext();
 patchTypeORMRepositoryWithBaseRepository();

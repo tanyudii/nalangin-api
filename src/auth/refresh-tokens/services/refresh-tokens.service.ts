@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { RefreshToken } from '../entities/refresh-token.entity';
 import { CreateRefreshTokenDto } from '../dto/create-refresh-token.dto';
 
@@ -20,5 +20,34 @@ export class RefreshTokensService {
       accessTokenId,
       expiresAt,
     });
+  }
+
+  async updateAccessToken(
+    id: string,
+    accessTokenId: string,
+  ): Promise<RefreshToken> {
+    const refreshToken = await this.refreshTokenRepository.findOne({ id });
+    if (!refreshToken) {
+      throw new NotFoundException();
+    }
+
+    return this.refreshTokenRepository.save({
+      ...refreshToken,
+      accessTokenId,
+    });
+  }
+
+  async isValidExpiry(
+    refreshTokenId: string,
+    accessTokenId: string,
+  ): Promise<boolean> {
+    return !!(await this.refreshTokenRepository.findOne({
+      where: {
+        id: refreshTokenId,
+        revoked: false,
+        expiresAt: MoreThan(new Date()),
+        accessTokenId,
+      },
+    }));
   }
 }
