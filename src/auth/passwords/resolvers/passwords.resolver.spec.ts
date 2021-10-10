@@ -3,13 +3,14 @@ import { PasswordsResolver } from './passwords.resolver';
 import { PasswordsService } from '../services/passwords.service';
 import { PasswordResetsModule } from '../../password-resets/password-resets.module';
 import { DatabaseModule } from '../../../@database/database.module';
+import { UsersModule } from '../../../users/users.module';
 
 describe('PasswordsResolver', () => {
   let resolver: PasswordsResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, PasswordResetsModule],
+      imports: [DatabaseModule, PasswordResetsModule, UsersModule],
       providers: [PasswordsResolver, PasswordsService],
     }).compile();
 
