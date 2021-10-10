@@ -35,6 +35,10 @@ type PasswordMessage {
   message: String!
 }
 
+type RegisterMessage {
+  message: String!
+}
+
 type Query {
   accounts: [Account!]!
   account(id: String!): Account!
@@ -53,6 +57,7 @@ type Mutation {
   removeUser(id: String!): User!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): PasswordMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): PasswordMessage!
+  register(registerInput: RegisterInput!): RegisterMessage!
 }
 
 input CreateAccountInput {
@@ -98,5 +103,10 @@ input ResetPasswordInput {
   email: String!
   token: String!
   password: String!
-  passwordConfirmation: String!
+}
+
+input RegisterInput {
+  name: String!
+  email: String!
+  password: String!
 }

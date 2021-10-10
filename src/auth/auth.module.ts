@@ -6,6 +6,7 @@ import { TokensModule } from './tokens/tokens.module';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PasswordsModule } from './passwords/passwords.module';
+import { RegistersModule } from './registers/registers.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PasswordsModule } from './passwords/passwords.module';
     TokensModule,
     UsersModule,
     PasswordsModule,
+    RegistersModule,
   ],
   providers: [JwtStrategy],
 })
