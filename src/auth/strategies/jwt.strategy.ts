@@ -24,19 +24,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jti,
     );
 
-    if (!isValidAccessToken) {
-      return null;
-    }
-
-    let exceptionUser;
-    let user;
+    if (!isValidAccessToken) return null;
 
     try {
-      user = await this.usersService.findOne(sub);
+      return this.usersService.findOne(sub);
     } catch (e) {
-      exceptionUser = e;
+      return null;
     }
-
-    return exceptionUser || !user ? null : user;
   }
 }
