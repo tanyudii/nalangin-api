@@ -2,12 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type Account {
   id: String!
+  userId: String!
   name: String!
-  email: String!
-  phoneNumber: String!
-  avatar: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -17,18 +15,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Account {
-  id: String!
-  userId: String!
-  name: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type Token {
   accessToken: String!
   expiresAt: Int!
   refreshToken: String
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phoneNumber: String!
+  avatar: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type PasswordMessage {
