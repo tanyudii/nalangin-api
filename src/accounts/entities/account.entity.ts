@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @ObjectType()
 @Entity({ name: 'accounts' })
@@ -33,4 +34,7 @@ export class Account {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Field(() => User)
+  user: User;
 }

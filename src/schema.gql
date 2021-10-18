@@ -2,10 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Account {
+type User {
   id: String!
-  userId: String!
   name: String!
+  email: String!
+  phoneNumber: String!
+  avatar: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -15,14 +17,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type User {
+type Account {
   id: String!
+  userId: String!
   name: String!
-  email: String!
-  phoneNumber: String!
-  avatar: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  user: User!
 }
 
 type Token {
@@ -50,11 +51,11 @@ type Mutation {
   createAccount(createAccountInput: CreateAccountInput!): Account!
   updateAccount(updateAccountInput: UpdateAccountInput!): Account!
   removeAccount(id: String!): Account!
-  createToken(createTokenInput: CreateTokenInput!): Token!
-  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): Token!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
+  createToken(createTokenInput: CreateTokenInput!): Token!
+  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): Token!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): PasswordMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): PasswordMessage!
   register(registerInput: RegisterInput!): RegisterMessage!
@@ -67,16 +68,6 @@ input CreateAccountInput {
 input UpdateAccountInput {
   name: String
   id: String!
-}
-
-input CreateTokenInput {
-  username: String!
-  password: String!
-}
-
-input CreateTokenByRefreshTokenInput {
-  accessToken: String!
-  refreshToken: String!
 }
 
 input CreateUserInput {
@@ -93,6 +84,16 @@ input UpdateUserInput {
   email: String!
   phoneNumber: String
   avatar: String
+}
+
+input CreateTokenInput {
+  username: String!
+  password: String!
+}
+
+input CreateTokenByRefreshTokenInput {
+  accessToken: String!
+  refreshToken: String!
 }
 
 input ForgotPasswordInput {

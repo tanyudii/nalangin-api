@@ -3,13 +3,18 @@ import { AccountsService } from './accounts.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from '../entities/account.entity';
 import { DatabaseModule } from '../../@database/database.module';
+import { UsersModule } from '../../users/users.module';
 
 describe('AccountsService', () => {
   let service: AccountsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, TypeOrmModule.forFeature([Account])],
+      imports: [
+        DatabaseModule,
+        UsersModule,
+        TypeOrmModule.forFeature([Account]),
+      ],
       providers: [AccountsService],
     }).compile();
 

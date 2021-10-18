@@ -26,7 +26,7 @@ import { PasswordReset } from '../auth/password-resets/entities/password-reset.e
           database: configService.get<string>('DB_DATABASE'),
           namingStrategy: new SnakeNamingStrategy(),
           synchronize: !isProduction,
-          dropSchema: !isProduction,
+          dropSchema: false,
           logging: !isProduction,
           entities: [Account, AccessToken, PasswordReset, RefreshToken, User],
         };
