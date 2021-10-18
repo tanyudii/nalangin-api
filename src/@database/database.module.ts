@@ -2,6 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { Account } from '../accounts/entities/account.entity';
+import { RefreshToken } from '../auth/refresh-tokens/entities/refresh-token.entity';
+import { User } from '../users/entities/user.entity';
+import { AccessToken } from '../auth/access-tokens/entities/access-token.entity';
+import { PasswordReset } from '../auth/password-resets/entities/password-reset.entity';
 
 @Module({
   imports: [
@@ -23,7 +28,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
           synchronize: !isProduction,
           dropSchema: !isProduction,
           logging: !isProduction,
-          entities: ['dist/**/*.entity{.ts,.js}'],
+          entities: [Account, AccessToken, PasswordReset, RefreshToken, User],
         };
       },
     }),

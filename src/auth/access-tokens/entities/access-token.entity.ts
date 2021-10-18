@@ -28,9 +28,6 @@ export class AccessToken {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => RefreshToken, (obj) => obj.accessToken, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.accessToken)
   refreshToken: RefreshToken;
 }

@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -31,9 +32,9 @@ export class RefreshToken {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => AccessToken, (obj) => obj.refreshToken, {
+  @JoinColumn()
+  @OneToOne(() => AccessToken, (accessToken) => accessToken.refreshToken, {
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
   })
   accessToken: AccessToken;
 }
