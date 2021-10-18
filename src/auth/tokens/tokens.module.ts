@@ -6,6 +6,7 @@ import { TokensService } from './services/tokens.service';
 import { AccessTokensModule } from '../access-tokens/access-tokens.module';
 import { RefreshTokensModule } from '../refresh-tokens/refresh-tokens.module';
 import { UsersModule } from '../../users/users.module';
+import { TokensController } from './controllers/tokens.controller';
 
 @Module({
   imports: [
@@ -18,5 +19,6 @@ import { UsersModule } from '../../users/users.module';
     UsersModule,
   ],
   providers: [TokensResolver, TokensService],
+  controllers: [TokensController],
 })
 export class TokensModule {}
