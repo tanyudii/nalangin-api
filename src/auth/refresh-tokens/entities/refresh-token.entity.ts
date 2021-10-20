@@ -12,7 +12,7 @@ import { AccessToken } from '../../access-tokens/entities/access-token.entity';
 @Entity({ name: 'refresh_tokens' })
 export class RefreshToken {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({ type: 'uuid' })
   userId: string;

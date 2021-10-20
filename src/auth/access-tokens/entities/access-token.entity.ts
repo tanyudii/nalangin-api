@@ -11,7 +11,7 @@ import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity
 @Entity({ name: 'access_tokens' })
 export class AccessToken {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({ type: 'uuid' })
   userId: string;

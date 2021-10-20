@@ -14,7 +14,7 @@ import { Exclude } from 'class-transformer';
 export class User {
   @Field()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Field()
   @Column()
