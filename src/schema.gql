@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Token {
+  accessToken: String!
+  expiresAt: Int!
+  refreshToken: String
+}
+
 type User {
   id: String!
   name: String!
@@ -17,21 +23,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Account {
-  id: String!
-  userId: String!
-  name: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  user: User!
-}
-
-type Token {
-  accessToken: String!
-  expiresAt: Int!
-  refreshToken: String
-}
-
 type PasswordMessage {
   message: String!
 }
@@ -40,34 +31,79 @@ type RegisterMessage {
   message: String!
 }
 
+type UserBank {
+  id: String!
+  userId: String!
+  bankName: String!
+  bankNumber: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+}
+
+type ShoppingItem {
+  id: String!
+  shoppingId: String!
+  borrowerId: String!
+  price: Float!
+  description: String!
+  percentage: Float!
+  delivery: Float!
+  discount: Float!
+  ppn: Float!
+  grandTotal: Float!
+}
+
+type Shopping {
+  id: String!
+  userId: String!
+  date: DateTime!
+  store: String!
+  isPpn: Boolean!
+  delivery: Float!
+  discount: Float!
+  ppn: Float!
+  grandTotal: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  shoppingItems: [ShoppingItem!]!
+}
+
 type Query {
-  accounts: [Account!]!
-  account(id: String!): Account!
   users: [User!]!
   user(id: String!): User!
+  userBanks: [UserBank!]!
+  userBank(id: String!): UserBank!
+  shoppings: [Shopping!]!
+  shopping(id: String!): Shopping!
 }
 
 type Mutation {
-  createAccount(createAccountInput: CreateAccountInput!): Account!
-  updateAccount(updateAccountInput: UpdateAccountInput!): Account!
-  removeAccount(id: String!): Account!
+  createToken(createTokenInput: CreateTokenInput!): Token!
+  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): Token!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
-  createToken(createTokenInput: CreateTokenInput!): Token!
-  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): Token!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): PasswordMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): PasswordMessage!
   register(registerInput: RegisterInput!): RegisterMessage!
+  createUserBank(createUserBankInput: CreateUserBankInput!): UserBank!
+  updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBank!
+  removeUserBank(id: String!): UserBank!
+  createShopping(createShoppingInput: CreateShoppingInput!): Shopping!
+  updateShopping(updateShoppingInput: UpdateShoppingInput!): Shopping!
+  removeShopping(id: String!): Shopping!
 }
 
-input CreateAccountInput {
-  name: String!
+input CreateTokenInput {
+  username: String!
+  password: String!
 }
 
-input UpdateAccountInput {
-  name: String
-  id: String!
+input CreateTokenByRefreshTokenInput {
+  accessToken: String!
+  refreshToken: String!
 }
 
 input CreateUserInput {
@@ -86,16 +122,6 @@ input UpdateUserInput {
   avatar: String
 }
 
-input CreateTokenInput {
-  username: String!
-  password: String!
-}
-
-input CreateTokenByRefreshTokenInput {
-  accessToken: String!
-  refreshToken: String!
-}
-
 input ForgotPasswordInput {
   email: String!
 }
@@ -110,4 +136,40 @@ input RegisterInput {
   name: String!
   email: String!
   password: String!
+}
+
+input CreateUserBankInput {
+  bankName: String!
+  bankNumber: String!
+}
+
+input UpdateUserBankInput {
+  bankName: String
+  bankNumber: String
+  id: String!
+}
+
+input CreateShoppingInput {
+  date: DateTime!
+  store: String!
+  isPpn: Boolean!
+  delivery: Float!
+  discount: Float!
+  shoppingItems: [ShoppingItemInput!]!
+}
+
+input ShoppingItemInput {
+  borrowerId: String!
+  price: Float!
+  description: String!
+}
+
+input UpdateShoppingInput {
+  date: DateTime
+  store: String
+  isPpn: Boolean
+  delivery: Float
+  discount: Float
+  shoppingItems: [ShoppingItemInput!]
+  id: String!
 }

@@ -8,7 +8,9 @@ export class RegistersResolver {
   constructor(private readonly registersService: RegistersService) {}
 
   @Mutation(() => RegisterMessage)
-  register(@Args('registerInput') registerInput: RegisterInput) {
+  async register(
+    @Args('registerInput') registerInput: RegisterInput,
+  ): Promise<RegisterMessage> {
     return this.registersService.register(registerInput);
   }
 }

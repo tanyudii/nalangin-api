@@ -9,16 +9,16 @@ export class PasswordsResolver {
   constructor(private readonly passwordsService: PasswordsService) {}
 
   @Mutation(() => PasswordMessage)
-  forgotPassword(
+  async forgotPassword(
     @Args('forgotPasswordInput') forgotPasswordInput: ForgotPasswordInput,
-  ) {
+  ): Promise<PasswordMessage> {
     return this.passwordsService.forgotPassword(forgotPasswordInput);
   }
 
   @Mutation(() => PasswordMessage)
-  resetPassword(
+  async resetPassword(
     @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput,
-  ) {
+  ): Promise<PasswordMessage> {
     return this.passwordsService.resetPassword(resetPasswordInput);
   }
 }

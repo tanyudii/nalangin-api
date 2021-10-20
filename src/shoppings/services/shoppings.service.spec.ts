@@ -1,24 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AccountsService } from './accounts.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Account } from '../entities/account.entity';
+import { ShoppingsService } from './shoppings.service';
 import { DatabaseModule } from '../../@database/database.module';
-import { UsersModule } from '../../users/users.module';
+import { Shopping } from '../entities/shopping.entity';
+import { ShoppingItem } from '../entities/shopping-items.entity';
 
-describe('AccountsService', () => {
-  let service: AccountsService;
+describe('ShoppingsService', () => {
+  let service: ShoppingsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
-        UsersModule,
-        TypeOrmModule.forFeature([Account]),
+        TypeOrmModule.forFeature([Shopping, ShoppingItem]),
       ],
-      providers: [AccountsService],
+      providers: [ShoppingsService],
     }).compile();
 
-    service = module.get<AccountsService>(AccountsService);
+    service = module.get<ShoppingsService>(ShoppingsService);
   });
 
   it('should be defined', () => {

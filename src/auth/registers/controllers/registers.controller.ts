@@ -8,7 +8,9 @@ export class RegistersController {
   constructor(private readonly registersService: RegistersService) {}
 
   @Post()
-  register(@Body() registerInput: RegisterInput): Promise<RegisterMessage> {
+  async register(
+    @Body() registerInput: RegisterInput,
+  ): Promise<RegisterMessage> {
     return this.registersService.register(registerInput);
   }
 }

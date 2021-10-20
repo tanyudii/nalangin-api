@@ -18,25 +18,29 @@ export class UsersResolver {
 
   @UseGuards(JwtGqlGuard)
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id') id: string) {
+  async findOne(@Args('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  async createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput,
+  ): Promise<User> {
     return this.usersService.create(createUserInput);
   }
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+  async updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ): Promise<User> {
     return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => User)
-  removeUser(@Args('id') id: string) {
+  async removeUser(@Args('id') id: string): Promise<User> {
     return this.usersService.remove(id);
   }
 }

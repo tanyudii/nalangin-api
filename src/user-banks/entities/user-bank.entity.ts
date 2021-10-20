@@ -10,11 +10,11 @@ import {
 import { User } from '../../users/entities/user.entity';
 
 @ObjectType()
-@Entity({ name: 'accounts' })
-export class Account {
+@Entity({ name: 'user_banks' })
+export class UserBank {
   @Field()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Field()
   @Column({ type: 'uuid' })
@@ -22,7 +22,11 @@ export class Account {
 
   @Field()
   @Column()
-  name: string;
+  bankName: string;
+
+  @Field()
+  @Column()
+  bankNumber: string;
 
   @Field(() => Date)
   @CreateDateColumn()

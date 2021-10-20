@@ -3,7 +3,7 @@ import * as DataLoader from 'dataloader';
 import { UsersService } from '../../users/services/users.service';
 
 @Injectable({ scope: Scope.REQUEST })
-export class AccountsLoaders {
+export class UserBanksLoader {
   constructor(private readonly usersService: UsersService) {}
 
   public readonly batchUsers = new DataLoader(async (userIds: string[]) => {

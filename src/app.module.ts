@@ -4,9 +4,10 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { DatabaseModule } from './@database/database.module';
 import { configValidationSchema } from './@common/constants/config.constant';
-import { AccountsModule } from './accounts/accounts.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { UserBanksModule } from './user-banks/user-banks.module';
+import { ShoppingsModule } from './shoppings/shoppings.module';
 
 @Module({
   imports: [
@@ -18,9 +19,10 @@ import { UsersModule } from './users/users.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     DatabaseModule,
-    AccountsModule,
     AuthModule,
     UsersModule,
+    UserBanksModule,
+    ShoppingsModule,
   ],
 })
 export class AppModule {}
