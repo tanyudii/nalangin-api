@@ -7,6 +7,7 @@ import {
   IsUrl,
   MinLength,
 } from 'class-validator';
+
 import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
 
 @InputType()

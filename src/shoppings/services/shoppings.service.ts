@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateShoppingInput } from '../dto/create-shopping.input';
+import { In, Not, Repository } from 'typeorm';
+
+import {
+  CreateShoppingInput,
+  CreateShoppingItemInput,
+} from '../dto/create-shopping.input';
 import { UpdateShoppingInput } from '../dto/update-shopping.input';
-import { Shopping } from '../entities/shopping.entity';
-import { Repository } from 'typeorm';
 import { ShoppingItem } from '../entities/shopping-items.entity';
+import { Shopping } from '../entities/shopping.entity';
 
 @Injectable()
 export class ShoppingsService {
@@ -20,10 +24,7 @@ export class ShoppingsService {
   }
 
   async findOne(userId: string, id: string): Promise<Shopping> {
-    const shopping = await this.shoppingRepository.findOne({
-      where: { userId, id },
-      relations: ['shoppingItems'],
-    });
+    const shopping = await this.shoppingRepository.findOne(id);
 
     if (!shopping) {
       throw new NotFoundException();
@@ -39,6 +40,12 @@ export class ShoppingsService {
     const { date, store, isPpn, delivery, discount, shoppingItems } =
       createShoppingInput;
 
+    const subtotal = shoppingItems
+      .map((shoppingItem) => shoppingItem.price)
+      .reduce((a, b) => a + b, 0);
+
+    const ppn = isPpn ? subtotal * 0.1 : 0;
+
     const shopping = await this.shoppingRepository.save({
       userId,
       date,
@@ -46,26 +53,14 @@ export class ShoppingsService {
       isPpn,
       delivery,
       discount,
-      ppn: 0,
-      grandTotal: 0,
+      ppn,
+      subtotal,
+      grandTotal: subtotal + ppn + delivery - discount,
     });
 
-    for (const shoppingItem of shoppingItems) {
-      const { borrowerId, price, description } = shoppingItem;
-      await this.shoppingItemRepository.save({
-        shopping: shopping,
-        borrowerId,
-        price,
-        description,
-        percentage: 0,
-        delivery: 0,
-        discount: 0,
-        ppn: 0,
-        grandTotal: 0,
-      });
-    }
+    await this.syncShoppingItem(shopping, shoppingItems);
 
-    return this.findOne(userId, shopping.id);
+    return shopping;
   }
 
   async update(
@@ -73,30 +68,40 @@ export class ShoppingsService {
     id: string,
     updateShoppingInput: UpdateShoppingInput,
   ): Promise<Shopping> {
-    const shopping = await this.shoppingRepository.findOne({
-      where: { userId, id },
-      relations: ['shoppingItems'],
-    });
+    const { date, store, isPpn, delivery, discount, shoppingItems } =
+      updateShoppingInput;
+
+    let shopping = await this.shoppingRepository.findOne({ userId, id });
 
     if (!shopping) {
       throw new NotFoundException();
     }
 
+    const subtotal = shoppingItems
+      .map((shoppingItem) => shoppingItem.price)
+      .reduce((a, b) => a + b, 0);
+
+    const ppn = isPpn ? subtotal * 0.1 : 0;
+
+    shopping = await this.shoppingRepository.save({
+      ...shopping,
+      date,
+      store,
+      isPpn,
+      delivery,
+      discount,
+      ppn,
+      subtotal,
+      grandTotal: subtotal + ppn + delivery - discount,
+    });
+
+    await this.syncShoppingItem(shopping, shoppingItems);
+
     return shopping;
-    // const { bankName, bankNumber } = updateShoppingInput;
-    // return this.userBankRepository.save({
-    //   ...userBank,
-    //   userId,
-    //   bankName,
-    //   bankNumber,
-    // });
   }
 
   async remove(userId: string, id: string): Promise<Shopping> {
-    const shopping = await this.shoppingRepository.findOne({
-      where: { userId, id },
-      relations: ['shoppingItems'],
-    });
+    const shopping = await this.shoppingRepository.findOne(id);
 
     if (!shopping) {
       throw new NotFoundException();
@@ -105,5 +110,49 @@ export class ShoppingsService {
     await this.shoppingRepository.softDelete({ id });
 
     return shopping;
+  }
+
+  protected async syncShoppingItem(
+    shopping: Shopping,
+    shoppingItems: CreateShoppingItemInput[],
+  ) {
+    //delete old shopping item
+    await this.shoppingItemRepository.softDelete({
+      shoppingId: shopping.id,
+      id: Not(
+        In(
+          shoppingItems.map((shoppingItem) => shoppingItem.id).filter((a) => a),
+        ),
+      ),
+    });
+
+    for (const shoppingItem of shoppingItems) {
+      const { id, borrowerId, price, description } = shoppingItem;
+
+      const ppnItem = shopping.isPpn ? price * 0.1 : 0;
+      const percentageItem = price / shopping.subtotal;
+      const deliveryItem = percentageItem * shopping.delivery;
+      const discountItem = percentageItem * shopping.discount;
+
+      const currentShoppingItem =
+        id === undefined
+          ? null
+          : await this.shoppingItemRepository.findOne({
+              shoppingId: shopping.id,
+              id,
+            });
+
+      await this.shoppingItemRepository.save({
+        ...(currentShoppingItem ? currentShoppingItem : { shopping }),
+        borrowerId,
+        price,
+        description,
+        ppn: ppnItem,
+        percentage: percentageItem * 100,
+        delivery: deliveryItem,
+        discount: discountItem,
+        total: price + ppnItem + deliveryItem - discountItem,
+      });
+    }
   }
 }

@@ -1,8 +1,9 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { PasswordsService } from '../services/passwords.service';
-import { PasswordMessage } from '../entities/password-message.entity';
+
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
+import { PasswordMessage } from '../entities/password-message.entity';
+import { PasswordsService } from '../services/passwords.service';
 
 @Resolver(() => PasswordMessage)
 export class PasswordsResolver {

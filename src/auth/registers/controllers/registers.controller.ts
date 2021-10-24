@@ -1,9 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { RegistersService } from '../services/registers.service';
+
 import { RegisterInput } from '../dto/register.input';
 import { RegisterMessage } from '../entities/register-message.entity';
+import { RegistersService } from '../services/registers.service';
 
-@Controller('registers')
+@Controller('register')
 export class RegistersController {
   constructor(private readonly registersService: RegistersService) {}
 

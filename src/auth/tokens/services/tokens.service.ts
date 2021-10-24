@@ -1,15 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as moment from 'moment';
-import { Token } from '../entities/token.entity';
-import { AccessTokensService } from '../../access-tokens/services/access-tokens.service';
-import { RefreshTokensService } from '../../refresh-tokens/services/refresh-tokens.service';
-import { CreateTokenInput } from '../dto/create-token.input';
-import { AccessToken } from '../../access-tokens/entities/access-token.entity';
-import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity';
-import { UsersService } from '../../../users/services/users.service';
+
 import { isEmail } from '../../../@common/helpers/validate.helper';
+import { UsersService } from '../../../users/services/users.service';
+import { AccessToken } from '../../access-tokens/entities/access-token.entity';
+import { AccessTokensService } from '../../access-tokens/services/access-tokens.service';
+import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity';
+import { RefreshTokensService } from '../../refresh-tokens/services/refresh-tokens.service';
 import { CreateTokenByRefreshTokenInput } from '../dto/create-token-by-refresh-token.input';
+import { CreateTokenInput } from '../dto/create-token.input';
+import { Token } from '../entities/token.entity';
 
 @Injectable()
 export class TokensService {

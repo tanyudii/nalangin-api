@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterInput } from '../dto/register.input';
+
 import { UsersService } from '../../../users/services/users.service';
+import { RegisterInput } from '../dto/register.input';
 import { RegisterMessage } from '../entities/register-message.entity';
 
 @Injectable()

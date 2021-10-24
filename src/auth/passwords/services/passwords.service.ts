@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ForgotPasswordInput } from '../dto/forgot-password.input';
-import { PasswordResetsService } from '../../password-resets/services/password-resets.service';
-import { PasswordMessage } from '../entities/password-message.entity';
+
 import { UsersService } from '../../../users/services/users.service';
+import { PasswordResetsService } from '../../password-resets/services/password-resets.service';
+import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
+import { PasswordMessage } from '../entities/password-message.entity';
 
 @Injectable()
 export class PasswordsService {

@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PasswordReset } from '../entities/password-reset.entity';
 import { MoreThan, Repository } from 'typeorm';
+
 import { CreatePasswordResetDto } from '../dtos/create-password-reset.dto';
+import { PasswordReset } from '../entities/password-reset.entity';
 
 @Injectable()
 export class PasswordResetsService {

@@ -1,12 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { DatabaseModule } from '../../@database/database.module';
-import { ShoppingsResolver } from './shoppings.resolver';
-import { ShoppingsService } from '../services/shoppings.service';
 import { UsersModule } from '../../users/users.module';
-import { Shopping } from '../entities/shopping.entity';
 import { ShoppingItem } from '../entities/shopping-items.entity';
+import { Shopping } from '../entities/shopping.entity';
 import { ShoppingsLoader } from '../loaders/shoppings.loader';
+import { ShoppingItemsService } from '../services/shopping-items.service';
+import { ShoppingsService } from '../services/shoppings.service';
+import { ShoppingsResolver } from './shoppings.resolver';
 
 describe('ShoppingsResolver', () => {
   let resolver: ShoppingsResolver;
@@ -18,7 +20,12 @@ describe('ShoppingsResolver', () => {
         UsersModule,
         TypeOrmModule.forFeature([Shopping, ShoppingItem]),
       ],
-      providers: [ShoppingsResolver, ShoppingsService, ShoppingsLoader],
+      providers: [
+        ShoppingsResolver,
+        ShoppingsService,
+        ShoppingItemsService,
+        ShoppingsLoader,
+      ],
     }).compile();
 
     resolver = module.get<ShoppingsResolver>(ShoppingsResolver);

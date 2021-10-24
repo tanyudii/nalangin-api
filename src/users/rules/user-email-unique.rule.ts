@@ -1,3 +1,4 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   registerDecorator,
   ValidationArguments,
@@ -5,7 +6,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { UsersService } from '../services/users.service';
 
 export function IsUserEmailUnique(validationOptions?: ValidationOptions) {

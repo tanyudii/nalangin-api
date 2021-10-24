@@ -1,10 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreateTokenInput } from '../dto/create-token.input';
-import { TokensService } from '../services/tokens.service';
-import { Token } from '../entities/token.entity';
-import { CreateTokenByRefreshTokenInput } from '../dto/create-token-by-refresh-token.input';
 
-@Controller('tokens')
+import { CreateTokenByRefreshTokenInput } from '../dto/create-token-by-refresh-token.input';
+import { CreateTokenInput } from '../dto/create-token.input';
+import { Token } from '../entities/token.entity';
+import { TokensService } from '../services/tokens.service';
+
+@Controller('token')
 export class TokensController {
   constructor(private readonly tokensService: TokensService) {}
 

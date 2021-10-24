@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PasswordsController } from './passwords.controller';
+
 import { DatabaseModule } from '../../../@database/database.module';
-import { PasswordResetsModule } from '../../password-resets/password-resets.module';
 import { UsersModule } from '../../../users/users.module';
+import { PasswordResetsModule } from '../../password-resets/password-resets.module';
 import { PasswordsService } from '../services/passwords.service';
+import { PasswordsController } from './passwords.controller';
 
 describe('PasswordsController', () => {
   let controller: PasswordsController;

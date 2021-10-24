@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { User } from '../../users/entities/user.entity';
 import { ShoppingItem } from './shopping-items.entity';
 
@@ -19,19 +20,19 @@ export class Shopping {
   id?: string;
 
   @Field()
-  @Column({ type: 'uuid' })
+  @Column('uuid')
   userId: string;
 
-  @Field(() => Date)
-  @Column({ type: 'date' })
-  date: Date;
+  @Field()
+  @Column('date')
+  date: string;
 
   @Field()
   @Column()
   store: string;
 
   @Field(() => Boolean)
-  @Column('tinyint', { default: '0' })
+  @Column('boolean', { default: '0' })
   isPpn: boolean;
 
   @Field(() => Number)
@@ -48,6 +49,10 @@ export class Shopping {
 
   @Field(() => Number)
   @Column('double')
+  subtotal: number;
+
+  @Field(() => Number)
+  @Column('double')
   grandTotal: number;
 
   @Field(() => Date)
@@ -58,8 +63,9 @@ export class Shopping {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Field(() => Date, { nullable: true })
   @DeleteDateColumn()
-  deletedAt: Date;
+  deletedAt?: Date;
 
   @Field(() => User)
   user: User;

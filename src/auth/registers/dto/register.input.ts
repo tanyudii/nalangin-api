@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, MinLength, Validate } from 'class-validator';
+
 import { UserEmailUnique } from '../../../users/rules/user-email-unique.rule';
 
 @InputType()

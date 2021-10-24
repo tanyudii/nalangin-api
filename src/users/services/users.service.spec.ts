@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
-import { DatabaseModule } from '../../@database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { DatabaseModule } from '../../@database/database.module';
 import { User } from '../entities/user.entity';
+import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   let service: UsersService;

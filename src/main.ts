@@ -1,13 +1,19 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { useContainer } from 'class-validator';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { useContainer, ValidationError } from 'class-validator';
 import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
 } from 'typeorm-transactional-cls-hooked';
-import { AppModule } from './app.module';
+
 import { CustomValidationPipe } from './@common/pipes/custom-validation.pipe';
+import { AppModule } from './app.module';
 
 initializeTransactionalContext();
 patchTypeORMRepositoryWithBaseRepository();
@@ -25,7 +31,7 @@ patchTypeORMRepositoryWithBaseRepository();
   app.useGlobalPipes(
     new CustomValidationPipe({
       transform: true,
-      stopAtFirstError: true,
+      // stopAtFirstError: true,
     }),
   );
 

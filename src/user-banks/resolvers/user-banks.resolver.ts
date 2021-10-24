@@ -1,28 +1,17 @@
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
 import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
-import { UserBanksService } from '../services/user-banks.service';
-import { UserBanksLoader } from '../loaders/user-banks.loader';
-import { UserBank } from '../entities/user-bank.entity';
 import { CreateUserBankInput } from '../dto/create-user-bank.input';
 import { UpdateUserBankInput } from '../dto/update-user-bank.input';
-import { User } from '../../users/entities/user.entity';
+import { UserBank } from '../entities/user-bank.entity';
+import { UserBanksService } from '../services/user-banks.service';
 
 @Resolver(() => UserBank)
 export class UserBanksResolver {
-  constructor(
-    private readonly userBanksService: UserBanksService,
-    private readonly userBanksLoader: UserBanksLoader,
-  ) {}
+  constructor(private readonly userBanksService: UserBanksService) {}
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => UserBank)
@@ -68,11 +57,5 @@ export class UserBanksResolver {
     @Args('id') id: string,
   ): Promise<UserBank> {
     return this.userBanksService.remove(currentUser.id, id);
-  }
-
-  @ResolveField('user', () => User)
-  async getAuthor(@Parent() userBank: UserBank): Promise<User> {
-    const { userId } = userBank;
-    return this.userBanksLoader.batchUsers.load(userId);
   }
 }

@@ -10,13 +10,13 @@ export class PasswordReset {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  @Column({ type: 'uuid' })
+  @Column('uuid')
   userId: string;
 
   @Column()
   email: string;
 
-  @Column({ type: 'datetime' })
+  @Column('datetime')
   expiresAt: Date;
 
   @CreateDateColumn()

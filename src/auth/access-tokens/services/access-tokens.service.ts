@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
-import { AccessToken } from '../entities/access-token.entity';
+
 import { CreateAccessTokenDto } from '../dto/create-access-token.dto';
+import { AccessToken } from '../entities/access-token.entity';
 
 @Injectable()
 export class AccessTokensService {

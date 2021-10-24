@@ -1,21 +1,21 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
   IsArray,
   IsBoolean,
-  IsDate,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
 } from 'class-validator';
-import { ShoppingItemInput } from './shopping-item.input';
-import { ShoppingItem } from '../entities/shopping-items.entity';
-import { Type } from 'class-transformer';
 
 @InputType()
 export class CreateShoppingInput {
-  @Field(() => Date)
+  @Field()
   @IsNotEmpty()
-  @IsDate()
-  date: Date;
+  date: string;
 
   @Field()
   @IsNotEmpty()
@@ -36,9 +36,32 @@ export class CreateShoppingInput {
   @IsNumber()
   discount: number;
 
-  @Field(() => [ShoppingItemInput])
-  @IsNotEmpty()
+  @Field(() => [CreateShoppingItemInput])
   @IsArray()
-  @Type(() => ShoppingItemInput)
-  shoppingItems: ShoppingItemInput[];
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateShoppingItemInput)
+  shoppingItems: CreateShoppingItemInput[];
+}
+
+@InputType()
+export class CreateShoppingItemInput {
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsUUID()
+  id?: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsUUID()
+  borrowerId: string;
+
+  @Field(() => Number)
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @Field()
+  @IsNotEmpty()
+  description: string;
 }

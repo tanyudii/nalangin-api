@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { DatabaseModule } from './@database/database.module';
+
 import { configValidationSchema } from './@common/constants/config.constant';
+import { DatabaseModule } from './@database/database.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { UserBanksModule } from './user-banks/user-banks.module';
 import { ShoppingsModule } from './shoppings/shoppings.module';
+import { UserBanksModule } from './user-banks/user-banks.module';
+import { UsersModule } from './users/users.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { ShoppingsModule } from './shoppings/shoppings.module';
     UsersModule,
     UserBanksModule,
     ShoppingsModule,
+    PaymentsModule,
   ],
 })
 export class AppModule {}

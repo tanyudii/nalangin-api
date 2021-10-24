@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Token {
-  accessToken: String!
-  expiresAt: Int!
-  refreshToken: String
-}
-
 type User {
   id: String!
   name: String!
@@ -16,6 +10,7 @@ type User {
   avatar: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
 """
@@ -31,6 +26,46 @@ type RegisterMessage {
   message: String!
 }
 
+type Token {
+  accessToken: String!
+  expiresAt: Int!
+  refreshToken: String
+}
+
+type Shopping {
+  id: String!
+  userId: String!
+  date: String!
+  store: String!
+  isPpn: Boolean!
+  delivery: Float!
+  discount: Float!
+  ppn: Float!
+  subtotal: Float!
+  grandTotal: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  user: User!
+  shoppingItems: [ShoppingItem!]!
+}
+
+type ShoppingItem {
+  id: String!
+  shoppingId: String!
+  borrowerId: String!
+  description: String!
+  price: Float!
+  percentage: Float!
+  delivery: Float!
+  discount: Float!
+  ppn: Float!
+  total: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
 type UserBank {
   id: String!
   userId: String!
@@ -38,36 +73,32 @@ type UserBank {
   bankNumber: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type Payment {
+  userId: String!
+  date: String!
+  lenderId: String!
+  lenderBankId: String!
+  delivery: Float!
+  discount: Float!
+  ppn: Float!
+  subtotal: Float!
+  grandTotal: Float!
+  paymentItems: [ShoppingItem!]!
   user: User!
 }
 
-type ShoppingItem {
-  id: String!
+type PaymentItem {
+  paymentId: String!
   shoppingId: String!
-  borrowerId: String!
   price: Float!
-  description: String!
   percentage: Float!
   delivery: Float!
   discount: Float!
   ppn: Float!
-  grandTotal: Float!
-}
-
-type Shopping {
-  id: String!
-  userId: String!
-  date: DateTime!
-  store: String!
-  isPpn: Boolean!
-  delivery: Float!
-  discount: Float!
-  ppn: Float!
-  grandTotal: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  user: User!
-  shoppingItems: [ShoppingItem!]!
+  total: Float!
 }
 
 type Query {
@@ -77,6 +108,8 @@ type Query {
   userBank(id: String!): UserBank!
   shoppings: [Shopping!]!
   shopping(id: String!): Shopping!
+  payments: [Payment!]!
+  payment(id: String!): Payment!
 }
 
 type Mutation {
@@ -94,6 +127,9 @@ type Mutation {
   createShopping(createShoppingInput: CreateShoppingInput!): Shopping!
   updateShopping(updateShoppingInput: UpdateShoppingInput!): Shopping!
   removeShopping(id: String!): Shopping!
+  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
+  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  removePayment(id: String!): Payment!
 }
 
 input CreateTokenInput {
@@ -150,26 +186,46 @@ input UpdateUserBankInput {
 }
 
 input CreateShoppingInput {
-  date: DateTime!
+  date: String!
   store: String!
   isPpn: Boolean!
   delivery: Float!
   discount: Float!
-  shoppingItems: [ShoppingItemInput!]!
+  shoppingItems: [CreateShoppingItemInput!]!
 }
 
-input ShoppingItemInput {
+input CreateShoppingItemInput {
+  id: String
   borrowerId: String!
   price: Float!
   description: String!
 }
 
 input UpdateShoppingInput {
-  date: DateTime
+  date: String
   store: String
   isPpn: Boolean
   delivery: Float
   discount: Float
-  shoppingItems: [ShoppingItemInput!]
+  shoppingItems: [CreateShoppingItemInput!]
+  id: String!
+}
+
+input CreatePaymentInput {
+  lenderId: String!
+  lenderBankId: String!
+  date: String!
+  paymentItems: [CreatePaymentItemInput!]!
+}
+
+input CreatePaymentItemInput {
+  shoppingId: String!
+}
+
+input UpdatePaymentInput {
+  lenderId: String
+  lenderBankId: String
+  date: String
+  paymentItems: [CreatePaymentItemInput!]
   id: String!
 }

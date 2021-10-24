@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Mutation,
@@ -6,17 +7,17 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { ShoppingsService } from '../services/shoppings.service';
-import { Shopping } from '../entities/shopping.entity';
+
+import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
+import { IUser } from '../../@common/interfaces/user.interface';
+import { User } from '../../users/entities/user.entity';
 import { CreateShoppingInput } from '../dto/create-shopping.input';
 import { UpdateShoppingInput } from '../dto/update-shopping.input';
-import { CurrentUser } from '../../@common/decorators/current-user.decorator';
-import { IUser } from '../../@common/interfaces/user.interface';
-import { UseGuards } from '@nestjs/common';
-import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
+import { ShoppingItem } from '../entities/shopping-items.entity';
+import { Shopping } from '../entities/shopping.entity';
 import { ShoppingsLoader } from '../loaders/shoppings.loader';
-import { User } from '../../users/entities/user.entity';
-import { UserBank } from '../../user-banks/entities/user-bank.entity';
+import { ShoppingsService } from '../services/shoppings.service';
 
 @Resolver(() => Shopping)
 export class ShoppingsResolver {
@@ -72,8 +73,14 @@ export class ShoppingsResolver {
   }
 
   @ResolveField('user', () => User)
-  async getAuthor(@Parent() userBank: UserBank): Promise<User> {
-    const { userId } = userBank;
+  async getUser(@Parent() shopping: Shopping): Promise<User> {
+    const { userId } = shopping;
     return this.shoppingsLoader.batchUsers.load(userId);
+  }
+
+  @ResolveField('shoppingItems', () => [ShoppingItem])
+  async getShoppingItem(@Parent() shopping: Shopping) {
+    const { id } = shopping;
+    return this.shoppingsLoader.batchShoppingItems.load(id);
   }
 }

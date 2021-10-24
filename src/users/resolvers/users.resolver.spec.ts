@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { DatabaseModule } from '../../@database/database.module';
-import { UsersResolver } from './users.resolver';
-import { UsersService } from '../services/users.service';
 import { User } from '../entities/user.entity';
+import { UsersService } from '../services/users.service';
+import { UsersResolver } from './users.resolver';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;

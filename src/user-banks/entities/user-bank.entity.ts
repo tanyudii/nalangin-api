@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 
 @ObjectType()
 @Entity({ name: 'user_banks' })
@@ -17,7 +16,7 @@ export class UserBank {
   id?: string;
 
   @Field()
-  @Column({ type: 'uuid' })
+  @Column('uuid')
   userId: string;
 
   @Field()
@@ -36,9 +35,7 @@ export class UserBank {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Field(() => Date, { nullable: true })
   @DeleteDateColumn()
-  deletedAt: Date;
-
-  @Field(() => User)
-  user: User;
+  deletedAt?: Date;
 }

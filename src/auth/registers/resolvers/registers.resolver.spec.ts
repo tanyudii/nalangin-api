@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { DatabaseModule } from '../../../@database/database.module';
-import { RegistersResolver } from './registers.resolver';
-import { RegistersService } from '../services/registers.service';
 import { UsersModule } from '../../../users/users.module';
+import { RegistersService } from '../services/registers.service';
+import { RegistersResolver } from './registers.resolver';
 
 describe('RegistersResolver', () => {
   let resolver: RegistersResolver;

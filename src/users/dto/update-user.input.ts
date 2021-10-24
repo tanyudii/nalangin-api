@@ -6,6 +6,7 @@ import {
   IsPhoneNumber,
   IsUrl,
 } from 'class-validator';
+
 import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
 
 @InputType()

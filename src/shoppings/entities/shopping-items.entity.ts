@@ -1,11 +1,15 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+
 import { Shopping } from './shopping.entity';
 
 @ObjectType()
@@ -16,20 +20,20 @@ export class ShoppingItem {
   id?: string;
 
   @Field()
-  @Column({ type: 'uuid' })
+  @Column('uuid')
   shoppingId: string;
 
   @Field()
-  @Column({ type: 'uuid' })
+  @Column('uuid')
   borrowerId: string;
-
-  @Field(() => Number)
-  @Column('double')
-  price: number;
 
   @Field()
   @Column()
   description: string;
+
+  @Field(() => Number)
+  @Column('double')
+  price: number;
 
   @Field(() => Number)
   @Column('float')
@@ -49,7 +53,19 @@ export class ShoppingItem {
 
   @Field(() => Number)
   @Column('double')
-  grandTotal: number;
+  total: number;
+
+  @Field(() => Date)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => Date)
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Field(() => Date, { nullable: true })
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   @JoinColumn()
   @ManyToOne(() => Shopping, (shopping) => shopping.shoppingItems, {

@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShoppingsService } from './shoppings.service';
+
 import { DatabaseModule } from '../../@database/database.module';
-import { Shopping } from '../entities/shopping.entity';
 import { ShoppingItem } from '../entities/shopping-items.entity';
+import { Shopping } from '../entities/shopping.entity';
+import { ShoppingsService } from './shoppings.service';
 
 describe('ShoppingsService', () => {
   let service: ShoppingsService;

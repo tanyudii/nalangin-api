@@ -1,14 +1,15 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { PasswordsService } from '../services/passwords.service';
+
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
 import { PasswordMessage } from '../entities/password-message.entity';
+import { PasswordsService } from '../services/passwords.service';
 
-@Controller('passwords')
+@Controller('password')
 export class PasswordsController {
   constructor(private readonly passwordsService: PasswordsService) {}
 
-  @Post('request')
+  @Post('forgot')
   async forgotPassword(
     @Body() forgotPasswordInput: ForgotPasswordInput,
   ): Promise<PasswordMessage> {
