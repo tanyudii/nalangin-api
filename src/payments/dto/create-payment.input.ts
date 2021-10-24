@@ -4,7 +4,6 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsNotEmpty,
-  IsOptional,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
