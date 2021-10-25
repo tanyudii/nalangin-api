@@ -4,6 +4,7 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -15,6 +16,7 @@ import {
 export class CreateShoppingInput {
   @Field()
   @IsNotEmpty()
+  @IsDateString()
   date: string;
 
   @Field()

@@ -66,16 +66,6 @@ type ShoppingItem {
   deletedAt: DateTime
 }
 
-type UserBank {
-  id: String!
-  userId: String!
-  bankName: String!
-  bankNumber: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-}
-
 type Payment {
   userId: String!
   date: String!
@@ -99,6 +89,16 @@ type PaymentItem {
   discount: Float!
   ppn: Float!
   total: Float!
+}
+
+type UserBank {
+  id: String!
+  userId: String!
+  bankName: String!
+  bankNumber: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
 type Query {

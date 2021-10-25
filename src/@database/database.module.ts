@@ -9,7 +9,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       imports: [ConfigModule.forRoot()],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const isProduction =
+        const isProduction: boolean =
           configService.get<string>('NODE_ENV') == 'production';
 
         return {
@@ -24,6 +24,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
           dropSchema: false,
           logging: false,
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+          timezone: '+00:00',
         };
       },
     }),
