@@ -6,12 +6,11 @@ import { join } from 'path';
 import { configValidationSchema } from './@common/constants/config.constant';
 import { DatabaseModule } from './@database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { OtpModule } from './otp/otp.module';
 import { PaymentsModule } from './payments/payments.module';
 import { ShoppingsModule } from './shoppings/shoppings.module';
 import { UserBanksModule } from './user-banks/user-banks.module';
 import { UsersModule } from './users/users.module';
-import { OtpModule } from './otp/otp.module';
-
 
 @Module({
   imports: [

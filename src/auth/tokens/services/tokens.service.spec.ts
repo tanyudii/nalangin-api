@@ -1,14 +1,17 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
   jwtExpiresIn,
   jwtSecret,
 } from '../../../@common/constants/jwt.constant';
 import { DatabaseModule } from '../../../@database/database.module';
-import { AccessTokensModule } from '../../../access-tokens/access-tokens.module';
 import { UsersModule } from '../../../users/users.module';
-import { RefreshTokensModule } from '../../refresh-tokens/refresh-tokens.module';
+import { AccessToken } from '../entities/access-token.entity';
+import { RefreshToken } from '../entities/refresh-token.entity';
+import { AccessTokensService } from './access-tokens.service';
+import { RefreshTokensService } from './refresh-tokens.service';
 import { TokensService } from './tokens.service';
 
 describe('TokensService', () => {
@@ -18,15 +21,14 @@ describe('TokensService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
+        UsersModule,
         JwtModule.register({
           secret: jwtSecret,
           signOptions: { expiresIn: jwtExpiresIn },
         }),
-        AccessTokensModule,
-        RefreshTokensModule,
-        UsersModule,
+        TypeOrmModule.forFeature([AccessToken, RefreshToken]),
       ],
-      providers: [TokensService],
+      providers: [AccessTokensService, RefreshTokensService, TokensService],
     }).compile();
 
     service = module.get<TokensService>(TokensService);
