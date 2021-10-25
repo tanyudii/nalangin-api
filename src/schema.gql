@@ -5,8 +5,8 @@
 type User {
   id: String!
   name: String!
-  email: String!
   phoneNumber: String!
+  email: String!
   avatar: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -120,6 +120,7 @@ type Mutation {
   removeUser(id: String!): User!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): PasswordMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): PasswordMessage!
+  registerRequestOtp(registerRequestOtpInput: RegisterRequestOtpInput!): RegisterMessage!
   register(registerInput: RegisterInput!): RegisterMessage!
   createUserBank(createUserBankInput: CreateUserBankInput!): UserBank!
   updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBank!
@@ -144,17 +145,17 @@ input CreateTokenByRefreshTokenInput {
 
 input CreateUserInput {
   name: String!
-  email: String!
-  password: String!
   phoneNumber: String
+  password: String!
+  email: String!
   avatar: String
 }
 
 input UpdateUserInput {
   id: String!
   name: String!
-  email: String!
   phoneNumber: String
+  email: String!
   avatar: String
 }
 
@@ -168,10 +169,15 @@ input ResetPasswordInput {
   password: String!
 }
 
+input RegisterRequestOtpInput {
+  phoneNumber: String!
+}
+
 input RegisterInput {
+  phoneNumber: String
   name: String!
-  email: String!
   password: String!
+  otp: String!
 }
 
 input CreateUserBankInput {

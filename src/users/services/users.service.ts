@@ -43,6 +43,15 @@ export class UsersService {
     return user;
   }
 
+  async findOneByPhoneNumber(phoneNumber: string): Promise<User> {
+    const user = await this.userRepository.findOne({ phoneNumber });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
   async findOneByEmailAndPassword(
     email: string,
     password: string,
@@ -68,15 +77,13 @@ export class UsersService {
   }
 
   async create(createUserInput: CreateUserInput): Promise<User> {
-    const { name, email, password, phoneNumber, avatar } = createUserInput;
-
-    const passwordHashed = await hashPassword(password);
+    const { name, phoneNumber, email, password, avatar } = createUserInput;
 
     return this.userRepository.save({
       name,
-      email,
-      password: passwordHashed,
       phoneNumber,
+      email,
+      password: await hashPassword(password),
       avatar,
     });
   }
@@ -103,11 +110,9 @@ export class UsersService {
       throw new NotFoundException();
     }
 
-    const passwordHashed = await hashPassword(password);
-
     return this.userRepository.save({
       ...user,
-      password: passwordHashed,
+      password: await hashPassword(password),
     });
   }
 

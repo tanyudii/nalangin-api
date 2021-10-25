@@ -22,15 +22,15 @@ export class User {
 
   @Field()
   @Column({ unique: true })
+  phoneNumber: string;
+
+  @Field()
+  @Column({ unique: true, nullable: true })
   email?: string;
 
   @Exclude()
   @Column({ nullable: true })
   password?: string;
-
-  @Field()
-  @Column({ nullable: true })
-  phoneNumber?: string;
 
   @Field()
   @Column({ nullable: true })

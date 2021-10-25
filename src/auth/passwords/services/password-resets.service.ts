@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 
-import { CreatePasswordResetDto } from '../dtos/create-password-reset.dto';
+import { CreatePasswordResetDto } from '../dto/create-password-reset.dto';
 import { PasswordReset } from '../entities/password-reset.entity';
 
 @Injectable()

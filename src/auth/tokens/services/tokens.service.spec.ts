@@ -6,8 +6,8 @@ import {
   jwtSecret,
 } from '../../../@common/constants/jwt.constant';
 import { DatabaseModule } from '../../../@database/database.module';
+import { AccessTokensModule } from '../../../access-tokens/access-tokens.module';
 import { UsersModule } from '../../../users/users.module';
-import { AccessTokensModule } from '../../access-tokens/access-tokens.module';
 import { RefreshTokensModule } from '../../refresh-tokens/refresh-tokens.module';
 import { TokensService } from './tokens.service';
 

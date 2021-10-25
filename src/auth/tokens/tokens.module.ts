@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { jwtExpiresIn, jwtSecret } from '../../@common/constants/jwt.constant';
 import { UsersModule } from '../../users/users.module';
-import { AccessTokensModule } from '../access-tokens/access-tokens.module';
-import { RefreshTokensModule } from '../refresh-tokens/refresh-tokens.module';
-import { TokensController } from './controllers/tokens.controller';
+import { AccessToken } from './entities/access-token.entity';
+import { RefreshToken } from './entities/refresh-token.entity';
 import { TokensResolver } from './resolvers/tokens.resolver';
+import { AccessTokensService } from './services/access-tokens.service';
+import { RefreshTokensService } from './services/refresh-tokens.service';
 import { TokensService } from './services/tokens.service';
 
 @Module({
@@ -15,11 +17,15 @@ import { TokensService } from './services/tokens.service';
       secret: jwtSecret,
       signOptions: { expiresIn: jwtExpiresIn },
     }),
-    AccessTokensModule,
-    RefreshTokensModule,
     UsersModule,
+    TypeOrmModule.forFeature([AccessToken, RefreshToken]),
   ],
-  providers: [TokensResolver, TokensService],
-  controllers: [TokensController],
+  providers: [
+    AccessTokensService,
+    RefreshTokensService,
+    TokensService,
+    TokensResolver,
+  ],
+  exports: [AccessTokensService],
 })
 export class TokensModule {}

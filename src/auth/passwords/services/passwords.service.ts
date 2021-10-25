@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { UsersService } from '../../../users/services/users.service';
-import { PasswordResetsService } from '../../password-resets/services/password-resets.service';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
 import { PasswordMessage } from '../entities/password-message.entity';
+import { PasswordResetsService } from './password-resets.service';
 
 @Injectable()
 export class PasswordsService {
@@ -57,7 +57,7 @@ export class PasswordsService {
     return this.passwordMessageFactory('Successfully update password.');
   }
 
-  passwordMessageFactory(message = 'Success'): PasswordMessage {
+  protected passwordMessageFactory(message = 'Success'): PasswordMessage {
     const passwordMessage = new PasswordMessage();
     passwordMessage.message = message;
     return passwordMessage;

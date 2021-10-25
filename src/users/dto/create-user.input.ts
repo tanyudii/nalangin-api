@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 
 import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
+import { IsUserPhoneNumberUnique } from '../rules/user-phone-number-unique.rule';
 
 @InputType()
 export class CreateUserInput {
@@ -16,21 +17,22 @@ export class CreateUserInput {
   @IsNotEmpty()
   name: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsNotEmpty()
-  @IsEmail()
-  @IsUserEmailUnique()
-  email: string;
+  @IsUserPhoneNumberUnique()
+  @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
+  phoneNumber: string;
 
   @Field()
   @IsNotEmpty()
   @MinLength(6)
   password: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsOptional()
-  @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
-  phoneNumber?: string;
+  @IsEmail()
+  @IsUserEmailUnique()
+  email?: string;
 
   @Field({ nullable: true })
   @IsOptional()

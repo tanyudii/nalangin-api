@@ -1,22 +1,20 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, MinLength, Validate } from 'class-validator';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { IsNotEmpty, MinLength } from 'class-validator';
 
-import { UserEmailUnique } from '../../../users/rules/user-email-unique.rule';
+import { RegisterRequestOtpInput } from './register-request-otp.input';
 
 @InputType()
-export class RegisterInput {
+export class RegisterInput extends PartialType(RegisterRequestOtpInput) {
   @Field()
   @IsNotEmpty()
   name: string;
 
   @Field()
   @IsNotEmpty()
-  @IsEmail()
-  @Validate(UserEmailUnique)
-  email: string;
+  @MinLength(8)
+  password: string;
 
   @Field()
   @IsNotEmpty()
-  @MinLength(8)
-  password: string;
+  otp: string;
 }

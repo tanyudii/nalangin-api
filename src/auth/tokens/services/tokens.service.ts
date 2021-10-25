@@ -4,13 +4,13 @@ import * as moment from 'moment';
 
 import { isEmail } from '../../../@common/helpers/validate.helper';
 import { UsersService } from '../../../users/services/users.service';
-import { AccessToken } from '../../access-tokens/entities/access-token.entity';
-import { AccessTokensService } from '../../access-tokens/services/access-tokens.service';
-import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity';
-import { RefreshTokensService } from '../../refresh-tokens/services/refresh-tokens.service';
 import { CreateTokenByRefreshTokenInput } from '../dto/create-token-by-refresh-token.input';
 import { CreateTokenInput } from '../dto/create-token.input';
+import { AccessToken } from '../entities/access-token.entity';
+import { RefreshToken } from '../entities/refresh-token.entity';
 import { Token } from '../entities/token.entity';
+import { AccessTokensService } from './access-tokens.service';
+import { RefreshTokensService } from './refresh-tokens.service';
 
 @Injectable()
 export class TokensService {
@@ -99,7 +99,10 @@ export class TokensService {
     return this.tokenFactory(newAccessToken);
   }
 
-  async tokenFactory(accessToken: AccessToken, refreshToken?: RefreshToken) {
+  protected async tokenFactory(
+    accessToken: AccessToken,
+    refreshToken?: RefreshToken,
+  ) {
     const token = new Token();
     token.expiresAt = Math.round(accessToken.expiresAt.valueOf() / 1000);
 
