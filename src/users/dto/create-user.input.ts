@@ -17,7 +17,7 @@ export class CreateUserInput {
   @IsNotEmpty()
   name: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsNotEmpty()
   @IsUserPhoneNumberUnique()
   @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
@@ -28,7 +28,7 @@ export class CreateUserInput {
   @MinLength(6)
   password: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsOptional()
   @IsEmail()
   @IsUserEmailUnique()

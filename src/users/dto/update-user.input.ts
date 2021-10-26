@@ -19,13 +19,13 @@ export class UpdateUserInput {
   @IsNotEmpty()
   name: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsNotEmpty()
   @IsUserPhoneNumberUnique()
   @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
   phoneNumber: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsOptional()
   @IsEmail()
   @IsUserEmailUnique()

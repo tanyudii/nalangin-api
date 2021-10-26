@@ -145,17 +145,17 @@ input CreateTokenByRefreshTokenInput {
 
 input CreateUserInput {
   name: String!
-  phoneNumber: String
+  phoneNumber: String!
   password: String!
-  email: String!
+  email: String
   avatar: String
 }
 
 input UpdateUserInput {
   id: String!
   name: String!
-  phoneNumber: String
-  email: String!
+  phoneNumber: String!
+  email: String
   avatar: String
 }
 
