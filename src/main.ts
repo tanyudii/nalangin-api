@@ -26,7 +26,7 @@ patchTypeORMRepositoryWithBaseRepository();
   app.useGlobalPipes(
     new CustomValidationPipe({
       transform: true,
-      // stopAtFirstError: true,
+      stopAtFirstError: true,
     }),
   );
 
