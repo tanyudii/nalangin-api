@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as moment from 'moment';
-import { LessThan, MoreThan, Repository } from 'typeorm';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
+import * as pluralize from 'pluralize';
+import { DeleteResult, LessThan, MoreThan, Repository } from 'typeorm';
 
 import { CreateOtpDto } from '../dtos/create-otp.dto';
 import { Otp } from '../entities/otp.entity';
@@ -22,7 +22,7 @@ export class OtpService {
       expiresIn = 120,
     } = createOtpDto;
 
-    const increment = 60;
+    const increment = 15;
     const expiresAt: Date = moment().add(expiresIn, 'seconds').toDate();
 
     await this.removeExpired();
@@ -35,14 +35,15 @@ export class OtpService {
 
     if (currentOtp) {
       if (currentOtp.availableNextAt.getTime() > new Date().getTime()) {
-        const retryingSeconds =
+        const retryingInSeconds = Math.ceil(
           currentOtp.availableNextAt.getTime() / 1000 -
-          new Date().getTime() / 1000;
+            new Date().getTime() / 1000,
+        );
+
+        const wordSeconds = pluralize('second', retryingInSeconds);
 
         throw new BadRequestException(
-          `Please wait until ${Math.round(
-            retryingSeconds,
-          )} second(s) before retrying`,
+          `Please wait until ${retryingInSeconds} ${wordSeconds} before retrying`,
         );
       }
 

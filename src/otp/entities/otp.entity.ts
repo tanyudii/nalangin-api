@@ -8,7 +8,7 @@ import {
 @Entity({ name: 'otp' })
 export class Otp {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column()
   subjectType: string;

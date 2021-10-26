@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
+  IsString,
   IsUrl,
 } from 'class-validator';
 
@@ -17,6 +18,7 @@ export class UpdateUserInput {
 
   @Field()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @Field()

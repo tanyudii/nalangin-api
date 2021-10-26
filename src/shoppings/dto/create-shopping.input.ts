@@ -8,6 +8,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsString,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
@@ -21,6 +22,7 @@ export class CreateShoppingInput {
 
   @Field()
   @IsNotEmpty()
+  @IsString()
   store: string;
 
   @Field(() => Boolean)

@@ -59,6 +59,7 @@ export class UserBanksService {
 
   async remove(userId: string, id: string): Promise<UserBank> {
     const userBank = await this.userBankRepository.findOne({ userId, id });
+
     if (!userBank) {
       throw new NotFoundException();
     }

@@ -101,6 +101,23 @@ type UserBank {
   deletedAt: DateTime
 }
 
+type Group {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  groupUsers: [GroupUser!]!
+}
+
+type GroupUser {
+  id: String!
+  groupId: String!
+  userId: String!
+  group: Group!
+  user: User!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
@@ -131,6 +148,10 @@ type Mutation {
   createPayment(createPaymentInput: CreatePaymentInput!): Payment!
   updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   removePayment(id: String!): Payment!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(id: String!): Group!
+  exitGroup(id: String!): Group!
 }
 
 input CreateTokenInput {
@@ -233,5 +254,14 @@ input UpdatePaymentInput {
   lenderBankId: String
   date: String
   paymentItems: [CreatePaymentItemInput!]
+  id: String!
+}
+
+input CreateGroupInput {
+  name: String!
+}
+
+input UpdateGroupInput {
+  name: String
   id: String!
 }

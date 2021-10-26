@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
+  IsDateString,
   IsNotEmpty,
   IsUUID,
   ValidateNested,
@@ -22,6 +23,7 @@ export class CreatePaymentInput {
 
   @Field()
   @IsNotEmpty()
+  @IsDateString()
   date: string;
 
   @Field(() => [CreatePaymentItemInput])

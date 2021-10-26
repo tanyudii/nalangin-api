@@ -38,6 +38,7 @@ export class PasswordResetsService {
 
   async remove(id: string): Promise<PasswordReset> {
     const passwordReset = await this.passwordResetRepository.findOne({ id });
+
     if (!passwordReset) {
       throw new NotFoundException();
     }

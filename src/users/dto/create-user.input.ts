@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
+  IsString,
   IsUrl,
   MinLength,
 } from 'class-validator';
@@ -15,6 +16,7 @@ import { IsUserPhoneNumberUnique } from '../rules/user-phone-number-unique.rule'
 export class CreateUserInput {
   @Field()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @Field()
@@ -25,6 +27,7 @@ export class CreateUserInput {
 
   @Field()
   @IsNotEmpty()
+  @IsString()
   @MinLength(6)
   password: string;
 

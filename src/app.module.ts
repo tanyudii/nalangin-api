@@ -11,6 +11,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { ShoppingsModule } from './shoppings/shoppings.module';
 import { UserBanksModule } from './user-banks/user-banks.module';
 import { UsersModule } from './users/users.module';
+import { GroupsModule } from './groups/groups.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersModule } from './users/users.module';
     ShoppingsModule,
     PaymentsModule,
     OtpModule,
+    GroupsModule,
   ],
 })
 export class AppModule {}
