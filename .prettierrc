@@ -1,6 +1,6 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@common/(.*)$", "^@database/(.*)$", "^[./]"],
+  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@common/(.*)$", "^@database/(.*)$",  "^@graphql/(.*)$", "^[./]"],
   "importOrderSeparation": true
 }
