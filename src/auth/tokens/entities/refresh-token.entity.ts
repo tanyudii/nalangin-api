@@ -20,7 +20,7 @@ export class RefreshToken {
   @Column('boolean', { default: '0' })
   revoked: boolean;
 
-  @Column('timestamp')
+  @Column('datetime')
   expiresAt: Date;
 
   @CreateDateColumn()
