@@ -1,17 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 import { CreateUserBankInput } from '../dto/create-user-bank.input';
 import { UpdateUserBankInput } from '../dto/update-user-bank.input';
 import { UserBank } from '../entities/user-bank.entity';
+import { UserBankRepository } from '../repositories/user-bank.repository';
 
 @Injectable()
 export class UserBanksService {
-  constructor(
-    @InjectRepository(UserBank)
-    private readonly userBankRepository: Repository<UserBank>,
-  ) {}
+  constructor(private readonly userBankRepository: UserBankRepository) {}
 
   async findAll(userId: string): Promise<UserBank[]> {
     return this.userBankRepository.find({ userId });
