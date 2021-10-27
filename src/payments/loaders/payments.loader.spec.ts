@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../../@database/database.module';
 import { ShoppingsModule } from '../../shoppings/shoppings.module';
 import { UsersModule } from '../../users/users.module';
-import { PaymentItem } from '../entities/payment-item.entity';
-import { Payment } from '../entities/payment.entity';
+import { PaymentItemRepository } from '../repositories/payment-item.repository';
+import { PaymentRepository } from '../repositories/payment.repository';
 import { PaymentItemsService } from '../services/payment-items.service';
 import { PaymentsService } from '../services/payments.service';
 import { PaymentsLoader } from './payments.loader';
@@ -17,11 +17,11 @@ describe('PaymentsLoader', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
+        TypeOrmModule.forFeature([PaymentRepository, PaymentItemRepository]),
         UsersModule,
         ShoppingsModule,
-        TypeOrmModule.forFeature([Payment, PaymentItem]),
       ],
-      providers: [PaymentsService, PaymentItemsService, PaymentsLoader],
+      providers: [PaymentsLoader, PaymentsService, PaymentItemsService],
     }).compile();
 
     loader = await module.resolve<PaymentsLoader>(PaymentsLoader);

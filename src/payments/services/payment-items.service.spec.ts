@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseModule } from '../../@database/database.module';
-import { PaymentItem } from '../entities/payment-item.entity';
+import { PaymentItemRepository } from '../repositories/payment-item.repository';
 import { PaymentItemsService } from './payment-items.service';
 
 describe('PaymentItemsService', () => {
@@ -10,7 +10,10 @@ describe('PaymentItemsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, TypeOrmModule.forFeature([PaymentItem])],
+      imports: [
+        DatabaseModule,
+        TypeOrmModule.forFeature([PaymentItemRepository]),
+      ],
       providers: [PaymentItemsService],
     }).compile();
 

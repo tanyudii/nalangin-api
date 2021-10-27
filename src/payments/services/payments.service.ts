@@ -1,21 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In } from 'typeorm';
 
-import { ShoppingItem } from '../../shoppings/entities/shopping-items.entity';
+import { ShoppingItem } from '../../shoppings/entities/shopping-item.entity';
 import { ShoppingItemsService } from '../../shoppings/services/shopping-items.service';
 import { CreatePaymentInput } from '../dto/create-payment.input';
 import { UpdatePaymentInput } from '../dto/update-payment.input';
 import { PaymentItem } from '../entities/payment-item.entity';
 import { Payment } from '../entities/payment.entity';
+import { PaymentItemRepository } from '../repositories/payment-item.repository';
+import { PaymentRepository } from '../repositories/payment.repository';
 
 @Injectable()
 export class PaymentsService {
   constructor(
-    @InjectRepository(Payment)
-    private readonly paymentRepository: Repository<Payment>,
-    @InjectRepository(PaymentItem)
-    private readonly paymentItemRepository: Repository<PaymentItem>,
+    private readonly paymentRepository: PaymentRepository,
+    private readonly paymentItemRepository: PaymentItemRepository,
     private readonly shoppingItemsService: ShoppingItemsService,
   ) {}
 

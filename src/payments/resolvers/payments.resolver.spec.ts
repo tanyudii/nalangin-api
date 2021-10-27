@@ -4,9 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../../@database/database.module';
 import { ShoppingsModule } from '../../shoppings/shoppings.module';
 import { UsersModule } from '../../users/users.module';
-import { PaymentItem } from '../entities/payment-item.entity';
-import { Payment } from '../entities/payment.entity';
 import { PaymentsLoader } from '../loaders/payments.loader';
+import { PaymentItemRepository } from '../repositories/payment-item.repository';
+import { PaymentRepository } from '../repositories/payment.repository';
 import { PaymentItemsService } from '../services/payment-items.service';
 import { PaymentsService } from '../services/payments.service';
 import { PaymentsResolver } from './payments.resolver';
@@ -18,9 +18,9 @@ describe('PaymentsResolver', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
-        UsersModule,
+        TypeOrmModule.forFeature([PaymentRepository, PaymentItemRepository]),
         ShoppingsModule,
-        TypeOrmModule.forFeature([Payment, PaymentItem]),
+        UsersModule,
       ],
       providers: [
         PaymentsResolver,

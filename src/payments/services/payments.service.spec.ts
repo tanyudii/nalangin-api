@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseModule } from '../../@database/database.module';
 import { ShoppingsModule } from '../../shoppings/shoppings.module';
-import { PaymentItem } from '../entities/payment-item.entity';
-import { Payment } from '../entities/payment.entity';
+import { PaymentItemRepository } from '../repositories/payment-item.repository';
+import { PaymentRepository } from '../repositories/payment.repository';
 import { PaymentsService } from './payments.service';
 
 describe('PaymentsService', () => {
@@ -14,8 +14,8 @@ describe('PaymentsService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
+        TypeOrmModule.forFeature([PaymentRepository, PaymentItemRepository]),
         ShoppingsModule,
-        TypeOrmModule.forFeature([Payment, PaymentItem]),
       ],
       providers: [PaymentsService],
     }).compile();
