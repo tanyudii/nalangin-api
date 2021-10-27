@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { jwtExpiresIn, jwtSecret } from '../../@common/constants/jwt.constant';
 import { UsersModule } from '../../users/users.module';
-import { AccessToken } from './entities/access-token.entity';
-import { RefreshToken } from './entities/refresh-token.entity';
+import { AccessTokenRepository } from './repositories/access-token.repository';
+import { RefreshTokenRepository } from './repositories/refresh-token.repository';
 import { TokensResolver } from './resolvers/tokens.resolver';
 import { AccessTokensService } from './services/access-tokens.service';
 import { RefreshTokensService } from './services/refresh-tokens.service';
@@ -17,14 +17,14 @@ import { TokensService } from './services/tokens.service';
       secret: jwtSecret,
       signOptions: { expiresIn: jwtExpiresIn },
     }),
+    TypeOrmModule.forFeature([AccessTokenRepository, RefreshTokenRepository]),
     UsersModule,
-    TypeOrmModule.forFeature([AccessToken, RefreshToken]),
   ],
   providers: [
+    TokensResolver,
     AccessTokensService,
     RefreshTokensService,
     TokensService,
-    TokensResolver,
   ],
   exports: [AccessTokensService],
 })

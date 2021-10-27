@@ -1,26 +1,26 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
+import { DefaultMessage } from '../../../@graphql/types/default-message.type';
 import { RegisterRequestOtpInput } from '../dto/register-request-otp.input';
 import { RegisterInput } from '../dto/register.input';
-import { RegisterMessage } from '../entities/register-message.entity';
 import { RegistersService } from '../services/registers.service';
 
-@Resolver(() => RegisterMessage)
+@Resolver()
 export class RegistersResolver {
   constructor(private readonly registersService: RegistersService) {}
 
-  @Mutation(() => RegisterMessage)
+  @Mutation(() => DefaultMessage)
   async registerRequestOtp(
     @Args('registerRequestOtpInput')
     registerRequestOtpInput: RegisterRequestOtpInput,
-  ): Promise<RegisterMessage> {
+  ): Promise<DefaultMessage> {
     return this.registersService.registerRequestOtp(registerRequestOtpInput);
   }
 
-  @Mutation(() => RegisterMessage)
+  @Mutation(() => DefaultMessage)
   async register(
     @Args('registerInput') registerInput: RegisterInput,
-  ): Promise<RegisterMessage> {
+  ): Promise<DefaultMessage> {
     return this.registersService.register(registerInput);
   }
 }

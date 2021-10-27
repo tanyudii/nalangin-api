@@ -8,8 +8,8 @@ import {
 } from '../../../@common/constants/jwt.constant';
 import { DatabaseModule } from '../../../@database/database.module';
 import { UsersModule } from '../../../users/users.module';
-import { AccessToken } from '../entities/access-token.entity';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { AccessTokenRepository } from '../repositories/access-token.repository';
+import { RefreshTokenRepository } from '../repositories/refresh-token.repository';
 import { AccessTokensService } from '../services/access-tokens.service';
 import { RefreshTokensService } from '../services/refresh-tokens.service';
 import { TokensService } from '../services/tokens.service';
@@ -22,18 +22,21 @@ describe('TokensResolver', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
-        UsersModule,
         JwtModule.register({
           secret: jwtSecret,
           signOptions: { expiresIn: jwtExpiresIn },
         }),
-        TypeOrmModule.forFeature([AccessToken, RefreshToken]),
+        TypeOrmModule.forFeature([
+          AccessTokenRepository,
+          RefreshTokenRepository,
+        ]),
+        UsersModule,
       ],
       providers: [
+        TokensResolver,
         AccessTokensService,
         RefreshTokensService,
         TokensService,
-        TokensResolver,
       ],
     }).compile();
 

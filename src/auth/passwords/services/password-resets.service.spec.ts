@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseModule } from '../../../@database/database.module';
-import { PasswordReset } from '../entities/password-reset.entity';
+import { PasswordResetRepository } from '../repositories/password-reset.repository';
 import { PasswordResetsService } from './password-resets.service';
 
 describe('PasswordResetsService', () => {
@@ -10,7 +10,10 @@ describe('PasswordResetsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, TypeOrmModule.forFeature([PasswordReset])],
+      imports: [
+        DatabaseModule,
+        TypeOrmModule.forFeature([PasswordResetRepository]),
+      ],
       providers: [PasswordResetsService],
     }).compile();
 

@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
+import { MoreThan } from 'typeorm';
 
 import { CreateAccessTokenDto } from '../dto/create-access-token.dto';
 import { AccessToken } from '../entities/access-token.entity';
+import { AccessTokenRepository } from '../repositories/access-token.repository';
 
 @Injectable()
 export class AccessTokensService {
-  constructor(
-    @InjectRepository(AccessToken)
-    private readonly accessTokenRepository: Repository<AccessToken>,
-  ) {}
+  constructor(private readonly accessTokenRepository: AccessTokenRepository) {}
 
   async create(
     createAccessTokenDto: CreateAccessTokenDto,

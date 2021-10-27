@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { DefaultMessage } from '../../../@graphql/types/default-message.type';
 import { UsersService } from '../../../users/services/users.service';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
-import { PasswordMessage } from '../entities/password-message.entity';
 import { PasswordResetsService } from './password-resets.service';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class PasswordsService {
 
   async forgotPassword(
     forgotPasswordInput: ForgotPasswordInput,
-  ): Promise<PasswordMessage> {
+  ): Promise<DefaultMessage> {
     const { email } = forgotPasswordInput;
     try {
       const user = await this.usersService.findOneByEmail(email);
@@ -35,7 +35,7 @@ export class PasswordsService {
 
   async resetPassword(
     resetPasswordInput: ResetPasswordInput,
-  ): Promise<PasswordMessage> {
+  ): Promise<DefaultMessage> {
     const { email, token, password } = resetPasswordInput;
 
     const isValidPasswordReset = await this.passwordResetsService.isValidExpiry(
@@ -57,8 +57,8 @@ export class PasswordsService {
     return this.passwordMessageFactory('Successfully update password.');
   }
 
-  protected passwordMessageFactory(message = 'Success'): PasswordMessage {
-    const passwordMessage = new PasswordMessage();
+  protected passwordMessageFactory(message = 'Success'): DefaultMessage {
+    const passwordMessage = new DefaultMessage();
     passwordMessage.message = message;
     return passwordMessage;
   }

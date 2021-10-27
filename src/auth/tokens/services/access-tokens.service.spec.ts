@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseModule } from '../../../@database/database.module';
-import { AccessToken } from '../entities/access-token.entity';
+import { AccessTokenRepository } from '../repositories/access-token.repository';
 import { AccessTokensService } from './access-tokens.service';
 
 describe('AccessTokensService', () => {
@@ -10,7 +10,10 @@ describe('AccessTokensService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, TypeOrmModule.forFeature([AccessToken])],
+      imports: [
+        DatabaseModule,
+        TypeOrmModule.forFeature([AccessTokenRepository]),
+      ],
       providers: [AccessTokensService],
     }).compile();
 

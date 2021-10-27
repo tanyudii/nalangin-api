@@ -1,15 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
+import { MoreThan } from 'typeorm';
 
 import { CreateRefreshTokenDto } from '../dto/create-refresh-token.dto';
 import { RefreshToken } from '../entities/refresh-token.entity';
+import { RefreshTokenRepository } from '../repositories/refresh-token.repository';
 
 @Injectable()
 export class RefreshTokensService {
   constructor(
-    @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepository: Repository<RefreshToken>,
+    private readonly refreshTokenRepository: RefreshTokenRepository,
   ) {}
 
   async create(

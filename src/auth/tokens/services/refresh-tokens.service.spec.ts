@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseModule } from '../../../@database/database.module';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { RefreshTokenRepository } from '../repositories/refresh-token.repository';
 import { RefreshTokensService } from './refresh-tokens.service';
 
 describe('RefreshTokensService', () => {
@@ -10,7 +10,10 @@ describe('RefreshTokensService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, TypeOrmModule.forFeature([RefreshToken])],
+      imports: [
+        DatabaseModule,
+        TypeOrmModule.forFeature([RefreshTokenRepository]),
+      ],
       providers: [RefreshTokensService],
     }).compile();
 
