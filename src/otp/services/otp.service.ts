@@ -1,18 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import * as moment from 'moment';
 import * as pluralize from 'pluralize';
-import { DeleteResult, LessThan, MoreThan, Repository } from 'typeorm';
+import { DeleteResult, LessThan, MoreThan } from 'typeorm';
 
 import { CreateOtpDto } from '../dtos/create-otp.dto';
 import { Otp } from '../entities/otp.entity';
+import { OtpRepository } from '../repositories/otp.repository';
 
 @Injectable()
 export class OtpService {
-  constructor(
-    @InjectRepository(Otp)
-    private readonly otpRepository: Repository<Otp>,
-  ) {}
+  constructor(private readonly otpRepository: OtpRepository) {}
 
   async create(createOtpDto: CreateOtpDto): Promise<Otp> {
     const {
