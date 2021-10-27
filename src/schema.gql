@@ -18,11 +18,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type PasswordMessage {
-  message: String!
-}
-
-type RegisterMessage {
+type DefaultMessage {
   message: String!
 }
 
@@ -30,6 +26,27 @@ type Token {
   accessToken: String!
   expiresAt: Int!
   refreshToken: String
+}
+
+type Group {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  groupUsers: [GroupUser!]!
+}
+
+type GroupUser {
+  id: String!
+  groupId: String!
+  userId: String!
+  role: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  group: Group!
+  user: User!
 }
 
 type Shopping {
@@ -101,23 +118,6 @@ type UserBank {
   deletedAt: DateTime
 }
 
-type Group {
-  id: String!
-  name: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-  groupUsers: [GroupUser!]!
-}
-
-type GroupUser {
-  id: String!
-  groupId: String!
-  userId: String!
-  group: Group!
-  user: User!
-}
-
 type Query {
   users: [User!]!
   user(id: String!): User!
@@ -127,6 +127,8 @@ type Query {
   shopping(id: String!): Shopping!
   payments: [Payment!]!
   payment(id: String!): Payment!
+  groups: [Group!]!
+  group(id: String!): Group!
 }
 
 type Mutation {
@@ -135,10 +137,10 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
-  forgotPassword(forgotPasswordInput: ForgotPasswordInput!): PasswordMessage!
-  resetPassword(resetPasswordInput: ResetPasswordInput!): PasswordMessage!
-  registerRequestOtp(registerRequestOtpInput: RegisterRequestOtpInput!): RegisterMessage!
-  register(registerInput: RegisterInput!): RegisterMessage!
+  forgotPassword(forgotPasswordInput: ForgotPasswordInput!): DefaultMessage!
+  resetPassword(resetPasswordInput: ResetPasswordInput!): DefaultMessage!
+  registerRequestOtp(registerRequestOtpInput: RegisterRequestOtpInput!): DefaultMessage!
+  register(registerInput: RegisterInput!): DefaultMessage!
   createUserBank(createUserBankInput: CreateUserBankInput!): UserBank!
   updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBank!
   removeUserBank(id: String!): UserBank!

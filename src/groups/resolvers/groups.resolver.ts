@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { CurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
@@ -7,11 +7,15 @@ import { IUser } from '../../@common/interfaces/user.interface';
 import { CreateGroupInput } from '../dto/create-group.input';
 import { UpdateGroupInput } from '../dto/update-group.input';
 import { Group } from '../entities/group.entity';
+import { GroupsLoader } from '../loaders/groups.loader';
 import { GroupsService } from '../services/groups.service';
 
 @Resolver(() => Group)
 export class GroupsResolver {
-  constructor(private readonly groupsService: GroupsService) {}
+  constructor(
+    private readonly groupsService: GroupsService,
+    private readonly groupsLoader: GroupsLoader,
+  ) {}
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
@@ -22,20 +26,20 @@ export class GroupsResolver {
     return this.groupsService.create(user.id, createGroupInput);
   }
 
-  // @UseGuards(JwtGqlGuard)
-  // @Query(() => [Group], { name: 'groups' })
-  // async findAll(@CurrentUser() user: IUser): Promise<Group[]> {
-  //   return this.groupsService.findAll(user.id);
-  // }
-  //
-  // @UseGuards(JwtGqlGuard)
-  // @Query(() => Group, { name: 'group' })
-  // async findOne(
-  //   @CurrentUser() user: IUser,
-  //   @Args('id') id: string,
-  // ): Promise<Group> {
-  //   return this.groupsService.findOne(user.id, id);
-  // }
+  @UseGuards(JwtGqlGuard)
+  @Query(() => [Group], { name: 'groups' })
+  async findAll(@CurrentUser() user: IUser): Promise<Group[]> {
+    return this.groupsService.findAll(user.id);
+  }
+
+  @UseGuards(JwtGqlGuard)
+  @Query(() => Group, { name: 'group' })
+  async findOne(
+    @CurrentUser() user: IUser,
+    @Args('id') id: string,
+  ): Promise<Group> {
+    return this.groupsService.findOne(user.id, id);
+  }
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)

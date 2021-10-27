@@ -1,20 +1,35 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 import { CreateGroupInput } from '../dto/create-group.input';
 import { UpdateGroupInput } from '../dto/update-group.input';
-import { GroupUser } from '../entities/group-user.entity';
+import { RoleType } from '../entities/group-user.entity';
 import { Group } from '../entities/group.entity';
+import { GroupUserRepository } from '../repositories/group-user.repository';
+import { GroupRepository } from '../repositories/group.repository';
 
 @Injectable()
 export class GroupsService {
   constructor(
-    @InjectRepository(Group)
-    private readonly groupRepository: Repository<Group>,
-    @InjectRepository(GroupUser)
-    private readonly groupUserRepository: Repository<GroupUser>,
+    private readonly groupRepository: GroupRepository,
+    private readonly groupUserRepository: GroupUserRepository,
   ) {}
+
+  async findAll(userId: string): Promise<Group[]> {
+    return this.groupRepository.my(userId, 'groups').getMany();
+  }
+
+  async findOne(userId: string, id: string): Promise<Group> {
+    const group = await this.groupRepository
+      .my(userId, 'groups')
+      .andWhere('groups.id = id', { id })
+      .getOne();
+
+    if (!group) {
+      throw new NotFoundException();
+    }
+
+    return group;
+  }
 
   async create(
     userId: string,
@@ -24,6 +39,7 @@ export class GroupsService {
 
     const group = await this.groupRepository.save({
       name,
+      role: RoleType.LEADER,
     });
 
     await this.groupUserRepository.save({
@@ -39,10 +55,10 @@ export class GroupsService {
     id: string,
     updateGroupInput: UpdateGroupInput,
   ): Promise<Group> {
-    const group = await this.groupRepository.findOne({
-      relations: ['groupUsers'],
-      where: { id, groupUsers: { userId } },
-    });
+    const group = await this.groupRepository
+      .my(userId, 'groups')
+      .andWhere('groups.id = :id', { id })
+      .getOne();
 
     if (!group) {
       throw new NotFoundException();
@@ -56,18 +72,16 @@ export class GroupsService {
   }
 
   async remove(userId: string, id: string): Promise<Group> {
-    const group = await this.groupRepository.findOne({
-      relations: ['groupUsers'],
-      where: { id, groupUsers: { userId } },
-    });
+    const group = await this.groupRepository
+      .my(userId, 'groups')
+      .andWhere('groups.id = :id', { id })
+      .getOne();
 
     if (!group) {
       throw new NotFoundException();
     }
 
-    await this.groupRepository.softDelete({ id });
-
-    return group;
+    return this.groupRepository.softRemove(group);
   }
 
   async exit(userId: string, id: string): Promise<Group> {
@@ -80,7 +94,7 @@ export class GroupsService {
       throw new NotFoundException();
     }
 
-    await this.groupUserRepository.softDelete({ id: groupUser.id });
+    await this.groupUserRepository.softRemove(groupUser);
 
     return groupUser.group;
   }
