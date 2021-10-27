@@ -1,6 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 import {
   comparePassword,
@@ -9,13 +7,11 @@ import {
 import { CreateUserInput } from '../dto/create-user.input';
 import { UpdateUserInput } from '../dto/update-user.input';
 import { User } from '../entities/user.entity';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async findAll(): Promise<User[]> {
     return this.userRepository.find();
@@ -123,8 +119,6 @@ export class UsersService {
       throw new NotFoundException();
     }
 
-    await this.userRepository.softDelete({ id });
-
-    return user;
+    return this.userRepository.softRemove(user);
   }
 }
