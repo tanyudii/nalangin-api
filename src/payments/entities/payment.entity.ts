@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+import { User } from '../../users/entities/user.entity';
 import { PaymentItem } from './payment-item.entity';
 
 @ObjectType()
@@ -48,4 +49,7 @@ export class Payment {
   @Field(() => [PaymentItem])
   @OneToMany(() => PaymentItem, (paymentItem) => paymentItem.payment)
   paymentItems: PaymentItem[];
+
+  @Field(() => User)
+  user: User;
 }

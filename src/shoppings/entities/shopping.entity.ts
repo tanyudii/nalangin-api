@@ -67,10 +67,10 @@ export class Shopping {
   @DeleteDateColumn()
   deletedAt?: Date;
 
-  @Field(() => User)
-  user: User;
-
   @Field(() => [ShoppingItem])
   @OneToMany(() => ShoppingItem, (shoppingItem) => shoppingItem.shopping)
   shoppingItems: ShoppingItem[];
+
+  @Field(() => User)
+  user: User;
 }

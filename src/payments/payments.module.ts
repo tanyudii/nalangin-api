@@ -12,8 +12,8 @@ import { PaymentsService } from './services/payments.service';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forFeature([PaymentRepository, PaymentItemRepository]),
+    UsersModule,
     ShoppingsModule,
   ],
   providers: [

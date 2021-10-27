@@ -79,7 +79,9 @@ export class ShoppingsResolver {
   }
 
   @ResolveField('shoppingItems', () => [ShoppingItem])
-  async getShoppingItem(@Parent() shopping: Shopping) {
+  async getShoppingItems(
+    @Parent() shopping: Shopping,
+  ): Promise<ShoppingItem[]> {
     const { id } = shopping;
     return this.shoppingsLoader.batchShoppingItems.load(id);
   }

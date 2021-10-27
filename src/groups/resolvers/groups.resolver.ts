@@ -1,11 +1,22 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 
 import { CurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
+import { User } from '../../users/entities/user.entity';
 import { CreateGroupInput } from '../dto/create-group.input';
+import { InviteGroupUserInput } from '../dto/invite-group-user.input';
+import { RemoveGroupUserInput } from '../dto/remove-group-user.input';
 import { UpdateGroupInput } from '../dto/update-group.input';
+import { GroupUser } from '../entities/group-user.entity';
 import { Group } from '../entities/group.entity';
 import { GroupsLoader } from '../loaders/groups.loader';
 import { GroupsService } from '../services/groups.service';
@@ -70,5 +81,43 @@ export class GroupsResolver {
     @Args('id') id: string,
   ): Promise<Group> {
     return this.groupsService.exit(user.id, id);
+  }
+
+  @UseGuards(JwtGqlGuard)
+  @Mutation(() => Group)
+  async inviteGroupUser(
+    @CurrentUser() user: IUser,
+    @Args('inviteGroupUserInput') inviteGroupUserInput: InviteGroupUserInput,
+  ): Promise<Group> {
+    return this.groupsService.inviteGroupUser(
+      user.id,
+      inviteGroupUserInput.id,
+      inviteGroupUserInput,
+    );
+  }
+
+  @UseGuards(JwtGqlGuard)
+  @Mutation(() => Group)
+  async removeGroupUser(
+    @CurrentUser() user: IUser,
+    @Args('removeGroupUserInput') removeGroupUserInput: RemoveGroupUserInput,
+  ): Promise<Group> {
+    return this.groupsService.removeGroupUser(
+      user.id,
+      removeGroupUserInput.id,
+      removeGroupUserInput,
+    );
+  }
+
+  @ResolveField('users', () => [User])
+  async getUsers(@Parent() group: Group): Promise<User[]> {
+    const { id } = group;
+    return this.groupsLoader.batchUsersOfGroupUsers.load(id);
+  }
+
+  @ResolveField('groupUsers', () => [GroupUser])
+  async getGroupUsers(@Parent() group: Group): Promise<GroupUser[]> {
+    const { id } = group;
+    return this.groupsLoader.batchGroupUsers.load(id);
   }
 }

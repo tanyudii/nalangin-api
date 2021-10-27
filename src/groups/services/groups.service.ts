@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CreateGroupInput } from '../dto/create-group.input';
+import { InviteGroupUserInput } from '../dto/invite-group-user.input';
+import { RemoveGroupUserInput } from '../dto/remove-group-user.input';
 import { UpdateGroupInput } from '../dto/update-group.input';
 import { RoleType } from '../entities/group-user.entity';
 import { Group } from '../entities/group.entity';
@@ -21,7 +27,7 @@ export class GroupsService {
   async findOne(userId: string, id: string): Promise<Group> {
     const group = await this.groupRepository
       .my(userId, 'groups')
-      .andWhere('groups.id = id', { id })
+      .andWhere('groups.id = :id', { id })
       .getOne();
 
     if (!group) {
@@ -97,5 +103,71 @@ export class GroupsService {
     await this.groupUserRepository.softRemove(groupUser);
 
     return groupUser.group;
+  }
+
+  async inviteGroupUser(
+    userId: string,
+    id: string,
+    inviteGroupUserInput: InviteGroupUserInput,
+  ): Promise<Group> {
+    const group = await this.groupRepository
+      .my(userId, 'groups')
+      .andWhere('groups.id = :id', { id })
+      .getOne();
+
+    if (!group) {
+      throw new NotFoundException();
+    }
+
+    const { userId: invitedUserId } = inviteGroupUserInput;
+    const currentUserGroup = await this.groupUserRepository.findOne({
+      userId: invitedUserId,
+      groupId: id,
+    });
+
+    if (currentUserGroup) {
+      throw new BadRequestException('user has already in group.');
+    }
+
+    await this.groupUserRepository.save({
+      userId: invitedUserId,
+      groupId: id,
+      role: RoleType.VILLAGER,
+    });
+
+    return group;
+  }
+
+  async removeGroupUser(
+    userId: string,
+    id: string,
+    removeGroupUserInput: RemoveGroupUserInput,
+  ): Promise<Group> {
+    const group = await this.groupRepository
+      .my(userId, 'groups')
+      .andWhere('groups.id = :id', { id })
+      .getOne();
+
+    if (!group) {
+      throw new NotFoundException();
+    }
+
+    const { userId: invitedUserId } = removeGroupUserInput;
+    const currentUserGroup = await this.groupUserRepository.findOne({
+      userId: invitedUserId,
+      groupId: id,
+    });
+
+    if (!currentUserGroup) {
+      throw new BadRequestException('user is not member of group.');
+    } else if (currentUserGroup.userId === userId) {
+      throw new BadRequestException('you cannot remove yourself.');
+    } else if (currentUserGroup.role === RoleType.LEADER) {
+      throw new BadRequestException('you cannot remove leader.');
+    }
+
+    await this.groupUserRepository.softRemove(currentUserGroup);
+
+    return group;
   }
 }

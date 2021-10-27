@@ -11,11 +11,10 @@ import {
 import { CurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
-import { ShoppingItem } from '../../shoppings/entities/shopping-item.entity';
-import { Shopping } from '../../shoppings/entities/shopping.entity';
 import { User } from '../../users/entities/user.entity';
 import { CreatePaymentInput } from '../dto/create-payment.input';
 import { UpdatePaymentInput } from '../dto/update-payment.input';
+import { PaymentItem } from '../entities/payment-item.entity';
 import { Payment } from '../entities/payment.entity';
 import { PaymentsLoader } from '../loaders/payments.loader';
 import { PaymentsService } from '../services/payments.service';
@@ -73,8 +72,8 @@ export class PaymentsResolver {
     return this.paymentsLoader.batchUsers.load(userId);
   }
 
-  @ResolveField('paymentItems', () => [ShoppingItem])
-  async getShoppingItem(@Parent() payment: Shopping) {
+  @ResolveField('paymentItems', () => [PaymentItem])
+  async getPaymentItems(@Parent() payment: Payment): Promise<PaymentItem[]> {
     const { id } = payment;
     return this.paymentsLoader.batchPaymentItems.load(id);
   }

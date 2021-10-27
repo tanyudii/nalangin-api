@@ -6,6 +6,7 @@ import {
   IsPhoneNumber,
   IsString,
   IsUrl,
+  IsUUID,
 } from 'class-validator';
 
 import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
@@ -14,6 +15,8 @@ import { IsUserPhoneNumberUnique } from '../rules/user-phone-number-unique.rule'
 @InputType()
 export class UpdateUserInput {
   @Field()
+  @IsNotEmpty()
+  @IsUUID()
   id: string;
 
   @Field()

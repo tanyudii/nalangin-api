@@ -10,9 +10,7 @@ export class PaymentItemsService {
 
   async findAllByPaymentIds(paymentIds: string[]): Promise<PaymentItem[]> {
     return this.paymentItemRepository.find({
-      where: {
-        paymentId: In(paymentIds),
-      },
+      paymentId: In(paymentIds),
     });
   }
 }

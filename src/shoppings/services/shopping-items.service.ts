@@ -41,10 +41,6 @@ export class ShoppingItemsService {
   }
 
   async findAllByShoppingIds(shoppingIds: string[]): Promise<ShoppingItem[]> {
-    return this.shoppingItemRepository.find({
-      where: {
-        shoppingId: In(shoppingIds),
-      },
-    });
+    return this.shoppingItemRepository.find({ shoppingId: In(shoppingIds) });
   }
 }

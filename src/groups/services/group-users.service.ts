@@ -30,4 +30,8 @@ export class GroupUsersService {
       where: condition,
     });
   }
+
+  async findAllByGroupIds(groupIds: string[]): Promise<GroupUser[]> {
+    return this.groupUserRepository.find({ groupId: In(groupIds) });
+  }
 }

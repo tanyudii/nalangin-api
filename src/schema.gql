@@ -35,6 +35,7 @@ type Group {
   updatedAt: DateTime!
   deletedAt: DateTime
   groupUsers: [GroupUser!]!
+  users: [User!]!
 }
 
 type GroupUser {
@@ -63,8 +64,8 @@ type Shopping {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  user: User!
   shoppingItems: [ShoppingItem!]!
+  user: User!
 }
 
 type ShoppingItem {
@@ -93,7 +94,7 @@ type Payment {
   ppn: Float!
   subtotal: Float!
   grandTotal: Float!
-  paymentItems: [ShoppingItem!]!
+  paymentItems: [PaymentItem!]!
   user: User!
 }
 
@@ -154,6 +155,8 @@ type Mutation {
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   removeGroup(id: String!): Group!
   exitGroup(id: String!): Group!
+  inviteGroupUser(inviteGroupUserInput: InviteGroupUserInput!): Group!
+  removeGroupUser(removeGroupUserInput: RemoveGroupUserInput!): Group!
 }
 
 input CreateTokenInput {
@@ -266,4 +269,14 @@ input CreateGroupInput {
 input UpdateGroupInput {
   name: String
   id: String!
+}
+
+input InviteGroupUserInput {
+  id: String!
+  userId: String!
+}
+
+input RemoveGroupUserInput {
+  id: String!
+  userId: String!
 }
