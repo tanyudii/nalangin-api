@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  app:
+    build:
+      context: ./
+    container_name: app
+    restart: unless-stopped
+    ports:
+      - "3010:3000"
+    env_file:
+      - .env.docker
+    depends_on:
+      - mysql
+      - mailhog
+  mysql:
+    image: 'mysql:5.7'
+    container_name: mysql
+    restart: unless-stopped
+    command: mysqld --sql_mode=""
+    ports:
+      - "3305:3306"
+    env_file:
+      - .env.docker
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+  mailhog:
+    image: 'mailhog/mailhog'
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - '1026:1025'
+      - '8026:8025'
