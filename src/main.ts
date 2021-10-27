@@ -1,6 +1,10 @@
 import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { useContainer } from 'class-validator';
 import {
   initializeTransactionalContext,
@@ -20,7 +24,10 @@ patchTypeORMRepositoryWithBaseRepository();
   const appHost = configService.get<string>('APP_HOST') || '0.0.0.0';
   const appPort = configService.get<number>('APP_PORT') || '3000';
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
   //is used for transform pipes message
   app.useGlobalPipes(
