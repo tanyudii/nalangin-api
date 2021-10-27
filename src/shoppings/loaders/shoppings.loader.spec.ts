@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseModule } from '../../@database/database.module';
 import { UsersModule } from '../../users/users.module';
-import { ShoppingItem } from '../entities/shopping-items.entity';
-import { Shopping } from '../entities/shopping.entity';
+import { ShoppingItemRepository } from '../repositories/shopping-item.repository';
+import { ShoppingRepository } from '../repositories/shopping.repository';
 import { ShoppingItemsService } from '../services/shopping-items.service';
 import { ShoppingsService } from '../services/shoppings.service';
 import { ShoppingsLoader } from './shoppings.loader';
@@ -16,10 +16,10 @@ describe('ShoppingsLoader', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
+        TypeOrmModule.forFeature([ShoppingRepository, ShoppingItemRepository]),
         UsersModule,
-        TypeOrmModule.forFeature([Shopping, ShoppingItem]),
       ],
-      providers: [ShoppingsService, ShoppingItemsService, ShoppingsLoader],
+      providers: [ShoppingsLoader, ShoppingsService, ShoppingItemsService],
     }).compile();
 
     loader = await module.resolve<ShoppingsLoader>(ShoppingsLoader);

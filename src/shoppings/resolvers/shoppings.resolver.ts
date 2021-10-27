@@ -14,7 +14,7 @@ import { IUser } from '../../@common/interfaces/user.interface';
 import { User } from '../../users/entities/user.entity';
 import { CreateShoppingInput } from '../dto/create-shopping.input';
 import { UpdateShoppingInput } from '../dto/update-shopping.input';
-import { ShoppingItem } from '../entities/shopping-items.entity';
+import { ShoppingItem } from '../entities/shopping-item.entity';
 import { Shopping } from '../entities/shopping.entity';
 import { ShoppingsLoader } from '../loaders/shoppings.loader';
 import { ShoppingsService } from '../services/shoppings.service';

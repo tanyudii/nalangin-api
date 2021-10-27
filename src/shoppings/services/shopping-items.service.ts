@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In } from 'typeorm';
 import { FindConditions } from 'typeorm/find-options/FindConditions';
 
 import { FindAllShoppingItemArg } from '../dto/args/find-all-shopping-item.arg';
-import { ShoppingItem } from '../entities/shopping-items.entity';
+import { ShoppingItem } from '../entities/shopping-item.entity';
+import { ShoppingItemRepository } from '../repositories/shopping-item.repository';
 
 @Injectable()
 export class ShoppingItemsService {
   constructor(
-    @InjectRepository(ShoppingItem)
-    private readonly shoppingItemRepository: Repository<ShoppingItem>,
+    private readonly shoppingItemRepository: ShoppingItemRepository,
   ) {}
 
   async findAll(

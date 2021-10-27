@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
-import { ShoppingItem } from './shopping-items.entity';
+import { ShoppingItem } from './shopping-item.entity';
 
 @ObjectType()
 @Entity({ name: 'shoppings' })

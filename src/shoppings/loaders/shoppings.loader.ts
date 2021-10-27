@@ -15,8 +15,7 @@ export class ShoppingsLoader {
 
   public readonly batchUsers = new DataLoader(async (userIds: string[]) => {
     const users = await this.usersService.findAllByIds(userIds);
-    const usersMap = new Map(users.map((user) => [user.id, user]));
-    return userIds.map((userId) => usersMap.get(userId));
+    return userIds.map((userId) => users.find((user) => user.id === userId));
   });
 
   public readonly batchShoppingItems = new DataLoader(

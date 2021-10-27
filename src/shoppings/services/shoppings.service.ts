@@ -1,22 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Not, Repository } from 'typeorm';
+import { In, Not } from 'typeorm';
 
 import {
   CreateShoppingInput,
   CreateShoppingItemInput,
 } from '../dto/create-shopping.input';
 import { UpdateShoppingInput } from '../dto/update-shopping.input';
-import { ShoppingItem } from '../entities/shopping-items.entity';
 import { Shopping } from '../entities/shopping.entity';
+import { ShoppingItemRepository } from '../repositories/shopping-item.repository';
+import { ShoppingRepository } from '../repositories/shopping.repository';
 
 @Injectable()
 export class ShoppingsService {
   constructor(
-    @InjectRepository(Shopping)
-    private readonly shoppingRepository: Repository<Shopping>,
-    @InjectRepository(ShoppingItem)
-    private readonly shoppingItemRepository: Repository<ShoppingItem>,
+    private readonly shoppingRepository: ShoppingRepository,
+    private readonly shoppingItemRepository: ShoppingItemRepository,
   ) {}
 
   async findAll(userId: string): Promise<Shopping[]> {
