@@ -1,10 +1,6 @@
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  Logger,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
