@@ -1,8 +1,16 @@
-import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { useContainer } from 'class-validator';
-import * as helmet from 'helmet';
+import { fastifyHelmet } from 'fastify-helmet';
 import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
@@ -22,9 +30,14 @@ patchTypeORMRepositoryWithBaseRepository();
   const appPort = configService.get<number>('APP_PORT') || '3000';
   const appEnv = configService.get<number>('NODE_ENV') || '3000';
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
-  app.use(helmet());
+  await app.register(fastifyHelmet, {
+    contentSecurityPolicy: false,
+  });
 
   //is used for transform pipes message
   app.useGlobalPipes(
