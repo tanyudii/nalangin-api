@@ -1,10 +1,10 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-import { RegisterRequestOtpInput } from './register-request-otp.input';
+import { RegisterOtpInput } from './register-otp.input';
 
 @InputType()
-export class RegisterInput extends PartialType(RegisterRequestOtpInput) {
+export class RegisterInput extends PartialType(RegisterOtpInput) {
   @Field()
   @IsNotEmpty()
   @IsString()

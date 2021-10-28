@@ -1,7 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class RegisterRequestOtpResponseType {
+export class RegisterOtpResponse {
+  @Field()
   message: string;
 
   @Field(() => Int)

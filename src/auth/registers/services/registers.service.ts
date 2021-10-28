@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { DefaultMessage } from '../../../@graphql/types/default-message.type';
+import { Otp } from '../../../otp/entities/otp.entity';
 import { OtpService } from '../../../otp/services/otp.service';
 import { UsersService } from '../../../users/services/users.service';
-import { RegisterRequestOtpInput } from '../dto/register-request-otp.input';
+import { RegisterOtpInput } from '../dto/register-otp.input';
 import { RegisterInput } from '../dto/register.input';
+import { RegisterOtpResponse } from '../types/register-otp-response.type';
 
 @Injectable()
 export class RegistersService {
@@ -13,19 +15,19 @@ export class RegistersService {
     private readonly usersService: UsersService,
   ) {}
 
-  async registerRequestOtp(
-    registerRequestOtpInput: RegisterRequestOtpInput,
-  ): Promise<DefaultMessage> {
-    const { phoneNumber } = registerRequestOtpInput;
+  async registerOtp(
+    registerOtpInput: RegisterOtpInput,
+  ): Promise<RegisterOtpResponse> {
+    const { phoneNumber } = registerOtpInput;
 
-    await this.otpService.create({
+    const otp = await this.otpService.create({
       subjectType: 'register',
       subjectId: phoneNumber,
       phoneNumber: phoneNumber,
       expiresIn: 120,
     });
 
-    return this.registerMessageFactory(`Successfully send OTP.`);
+    return this.registerOtpFactory(`Successfully send OTP.`, otp);
   }
 
   async register(registerInput: RegisterInput): Promise<DefaultMessage> {
@@ -51,6 +53,17 @@ export class RegistersService {
     await this.otpService.revoke('register', phoneNumber, phoneNumber, otp);
 
     return this.registerMessageFactory(`Hi ${name} :)`);
+  }
+
+  protected registerOtpFactory(
+    message = 'Success',
+    otp: Otp,
+  ): RegisterOtpResponse {
+    const registerOtpResponse = new RegisterOtpResponse();
+    registerOtpResponse.message = message;
+    registerOtpResponse.increment = otp.increment;
+    registerOtpResponse.availableNextAt = otp.availableNextAt;
+    return registerOtpResponse;
   }
 
   protected registerMessageFactory(message = 'Success'): DefaultMessage {

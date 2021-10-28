@@ -22,6 +22,12 @@ type DefaultMessage {
   message: String!
 }
 
+type RegisterOtpResponse {
+  message: String!
+  increment: Int!
+  availableNextAt: DateTime!
+}
+
 type Token {
   accessToken: String!
   expiresAt: Int!
@@ -140,7 +146,7 @@ type Mutation {
   removeUser(id: String!): User!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): DefaultMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): DefaultMessage!
-  registerRequestOtp(registerRequestOtpInput: RegisterRequestOtpInput!): DefaultMessage!
+  registerOtp(registerOtpInput: RegisterOtpInput!): RegisterOtpResponse!
   register(registerInput: RegisterInput!): DefaultMessage!
   createUserBank(createUserBankInput: CreateUserBankInput!): UserBank!
   updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBank!
@@ -195,7 +201,7 @@ input ResetPasswordInput {
   password: String!
 }
 
-input RegisterRequestOtpInput {
+input RegisterOtpInput {
   phoneNumber: String!
 }
 
