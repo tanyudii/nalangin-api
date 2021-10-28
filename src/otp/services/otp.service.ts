@@ -40,7 +40,7 @@ export class OtpService {
         const wordSeconds = pluralize('second', retryingInSeconds);
 
         throw new BadRequestException(
-          `Please wait until ${retryingInSeconds} ${wordSeconds} before retrying`,
+          `Please wait ${retryingInSeconds} ${wordSeconds} before retrying.`,
         );
       }
 
