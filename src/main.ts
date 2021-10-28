@@ -2,7 +2,6 @@ import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { useContainer } from 'class-validator';
-import * as csurf from 'csurf';
 import * as helmet from 'helmet';
 import {
   initializeTransactionalContext,
@@ -26,7 +25,6 @@ patchTypeORMRepositoryWithBaseRepository();
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
-  app.use(csurf());
 
   //is used for transform pipes message
   app.useGlobalPipes(
