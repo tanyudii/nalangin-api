@@ -4,10 +4,15 @@ services:
   app:
     build:
       context: ./
-    container_name: app
+      target: development
     restart: unless-stopped
+    volumes:
+      - .:/usr/local/app
+    # Run in Debug Mode: npm run start:debug --> Don't forget to start your vscode debugger!
+    # Run in dev Mode: npm run start:dev
+    command: npm run start:dev
     ports:
-      - "3010:3000"
+      - '3000:3000'
     env_file:
       - .env.docker
     depends_on:
@@ -15,19 +20,18 @@ services:
       - mailhog
   mysql:
     image: 'mysql:5.7'
-    container_name: mysql
     restart: unless-stopped
     ports:
-      - "3305:3306"
+      - '3305:3306'
     env_file:
       - .env.docker
+    command: mysqld --sql_mode="" --character-set-server=utf8 --collation-server=utf8_slovenian_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0 --max_allowed_packet=32505856
     healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
       timeout: 20s
       retries: 10
   mailhog:
     image: 'mailhog/mailhog'
-    container_name: mailhog
     restart: unless-stopped
     ports:
       - '1026:1025'

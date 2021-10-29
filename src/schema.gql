@@ -206,9 +206,9 @@ input RegisterOtpInput {
 }
 
 input RegisterInput {
-  phoneNumber: String
   name: String!
   password: String!
+  phoneNumber: String!
   otp: String!
 }
 

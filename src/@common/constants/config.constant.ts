@@ -14,4 +14,5 @@ export const configValidationSchema = joi.object({
   MAIL_PORT: joi.string().required(),
   MAIL_USERNAME: joi.string().required(),
   MAIL_PASSWORD: joi.string().required(),
+  MAIL_FROM: joi.string().required(),
 });
