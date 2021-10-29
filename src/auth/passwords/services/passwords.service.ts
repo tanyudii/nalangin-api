@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { DefaultMessage } from '../../../@graphql/types/default-message.type';
@@ -11,6 +12,7 @@ export class PasswordsService {
   constructor(
     private readonly passwordResetsService: PasswordResetsService,
     private readonly usersService: UsersService,
+    private readonly mailerService: MailerService,
   ) {}
 
   async forgotPassword(
@@ -20,12 +22,19 @@ export class PasswordsService {
     try {
       const user = await this.usersService.findOneByEmail(email);
 
-      await this.passwordResetsService.create({
+      const passwordReset = await this.passwordResetsService.create({
         userId: user.id,
         email: user.email,
       });
 
-      // todo: send email from created password reset token
+      await this.mailerService.sendMail({
+        to: `${user.name} <${user.email}>`,
+        subject: 'Password Reset',
+        html: `
+          <p>Click Here for Reset </p>
+          <a href="http://localhost:8000/reset-password?token=${passwordReset.id}">Reset Password</a>
+        `,
+      });
     } catch (e) {}
 
     return this.passwordMessageFactory(
