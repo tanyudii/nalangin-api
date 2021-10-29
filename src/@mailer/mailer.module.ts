@@ -1,7 +1,8 @@
 import { MailerModule as NestMailerModule } from '@nestjs-modules/mailer';
-import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,8 +24,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           from: configService.get<string>('MAIL_FROM'),
         },
         template: {
-          dir: __dirname + '/@mailer/templates',
-          adapter: new PugAdapter(),
+          dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
           },

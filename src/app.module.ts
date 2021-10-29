@@ -5,6 +5,7 @@ import { join } from 'path';
 
 import { configValidationSchema } from './@common/constants/config.constant';
 import { DatabaseModule } from './@database/database.module';
+import { MailerModule } from './@mailer/mailer.module';
 import { AuthModule } from './auth/auth.module';
 import { GroupsModule } from './groups/groups.module';
 import { OtpModule } from './otp/otp.module';
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     DatabaseModule,
+    MailerModule,
     AuthModule,
     UsersModule,
     UserBanksModule,
