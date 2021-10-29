@@ -1,10 +1,15 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
-import { RegisterOtpInput } from './register-otp.input';
+import { IsUserPhoneNumberUnique } from '../../../users/rules/user-phone-number-unique.rule';
 
 @InputType()
-export class RegisterInput extends PartialType(RegisterOtpInput) {
+export class RegisterInput {
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -15,6 +20,12 @@ export class RegisterInput extends PartialType(RegisterOtpInput) {
   @IsString()
   @MinLength(8)
   password: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsUserPhoneNumberUnique()
+  @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
+  phoneNumber: string;
 
   @Field()
   @IsNotEmpty()
