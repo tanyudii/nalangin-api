@@ -17,7 +17,6 @@ services:
     image: 'mysql:5.7'
     container_name: mysql
     restart: unless-stopped
-    command: mysqld --sql_mode=""
     ports:
       - "3305:3306"
     env_file:
