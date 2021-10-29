@@ -45,7 +45,7 @@ export class GroupsService {
 
     const group = await this.groupRepository.save({
       name,
-      role: RoleType.TRIBAL_CHIEF,
+      role: RoleType.CHIEFTAIN,
     });
 
     await this.groupUserRepository.save({
@@ -162,7 +162,7 @@ export class GroupsService {
       throw new BadRequestException('user is not member of group.');
     } else if (currentUserGroup.userId === userId) {
       throw new BadRequestException('you cannot remove yourself.');
-    } else if (currentUserGroup.role === RoleType.TRIBAL_CHIEF) {
+    } else if (currentUserGroup.role === RoleType.CHIEFTAIN) {
       throw new BadRequestException('you cannot remove leader.');
     }
 
