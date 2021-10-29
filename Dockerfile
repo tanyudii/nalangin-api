@@ -1,3 +1,15 @@
+FROM node:14-alpine as development
+
+WORKDIR /usr/local/app
+
+COPY package*.json ./
+
+RUN yarn install
+
+COPY . .
+
+RUN yarn build
+
 FROM node:14-alpine as build
 
 WORKDIR /usr/local/app
