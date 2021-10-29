@@ -4,24 +4,25 @@ import {
   comparePassword,
   hashPassword,
 } from '../../@common/helpers/bcrypt.helper';
-import { CreateUserInput } from '../dto/create-user.input';
-import { UpdateUserInput } from '../dto/update-user.input';
-import { User } from '../entities/user.entity';
+import { ICreateUserInput } from '../../@interfaces/users/dto/create-user.input';
+import { IUpdateUserInput } from '../../@interfaces/users/dto/update-user.input';
+import { IUser } from '../../@interfaces/users/entities/user.entity';
+import { IUsersService } from '../../@interfaces/users/services/users.service';
 import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements IUsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<IUser[]> {
     return this.userRepository.find();
   }
 
-  async findAllByIds(ids: string[]): Promise<User[]> {
+  async findAllByIDs(ids: string[]): Promise<IUser[]> {
     return this.userRepository.findByIds(ids);
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string): Promise<IUser> {
     const user = await this.userRepository.findOne({ id });
     if (!user) {
       throw new NotFoundException();
@@ -30,7 +31,7 @@ export class UsersService {
     return user;
   }
 
-  async findOneByEmail(email: string): Promise<User> {
+  async findOneByEmail(email: string): Promise<IUser> {
     const user = await this.userRepository.findOne({ email });
     if (!user) {
       throw new NotFoundException();
@@ -39,7 +40,7 @@ export class UsersService {
     return user;
   }
 
-  async findOneByPhoneNumber(phoneNumber: string): Promise<User> {
+  async findOneByPhoneNumber(phoneNumber: string): Promise<IUser> {
     const user = await this.userRepository.findOne({ phoneNumber });
     if (!user) {
       throw new NotFoundException();
@@ -51,7 +52,7 @@ export class UsersService {
   async findOneByEmailAndPassword(
     email: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<IUser> {
     const user = await this.userRepository.findOne({ email });
     if (!user || !(await comparePassword(user.password, password))) {
       throw new NotFoundException();
@@ -63,7 +64,7 @@ export class UsersService {
   async findOneByPhoneAndPassword(
     phoneNumber: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<IUser> {
     const user = await this.userRepository.findOne({ phoneNumber });
     if (!user || !(await comparePassword(user.password, password))) {
       throw new NotFoundException();
@@ -72,7 +73,7 @@ export class UsersService {
     return user;
   }
 
-  async create(createUserInput: CreateUserInput): Promise<User> {
+  async create(createUserInput: ICreateUserInput): Promise<IUser> {
     const { name, phoneNumber, email, password, avatar } = createUserInput;
 
     return this.userRepository.save({
@@ -84,7 +85,7 @@ export class UsersService {
     });
   }
 
-  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+  async update(id: string, updateUserInput: IUpdateUserInput): Promise<IUser> {
     const user = await this.userRepository.findOne({ id });
     if (!user) {
       throw new NotFoundException();
@@ -100,7 +101,7 @@ export class UsersService {
     });
   }
 
-  async updatePassword(id: string, password: string): Promise<User> {
+  async updatePassword(id: string, password: string): Promise<IUser> {
     const user = await this.userRepository.findOne({ id });
     if (!user) {
       throw new NotFoundException();
@@ -112,7 +113,7 @@ export class UsersService {
     });
   }
 
-  async remove(id: string): Promise<User> {
+  async remove(id: string): Promise<IUser> {
     const user = await this.userRepository.findOne({ id });
 
     if (!user) {

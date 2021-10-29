@@ -17,7 +17,7 @@ export class GroupsLoader {
         groupIds,
       );
 
-      const users = await this.usersService.findAllByIds(
+      const users = await this.usersService.findAllByIDs(
         groupUsers.map((groupUser) => groupUser.userId),
       );
 
@@ -39,7 +39,7 @@ export class GroupsLoader {
         groupIds,
       );
 
-      const users = await this.usersService.findAllByIds(
+      const users = await this.usersService.findAllByIDs(
         groupUsers.map((groupUser) => groupUser.userId),
       );
 

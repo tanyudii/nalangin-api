@@ -14,7 +14,7 @@ export class ShoppingsLoader {
   ) {}
 
   public readonly batchUsers = new DataLoader(async (userIds: string[]) => {
-    const users = await this.usersService.findAllByIds(userIds);
+    const users = await this.usersService.findAllByIDs(userIds);
     return userIds.map((userId) => users.find((user) => user.id === userId));
   });
 

@@ -8,9 +8,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { IUserBank } from '../../@interfaces/user-banks/entities/user-bank.entity';
+
 @ObjectType()
 @Entity({ name: 'user_banks' })
-export class UserBank {
+export class UserBank implements IUserBank {
   @Field()
   @PrimaryGeneratedColumn('uuid')
   id?: string;

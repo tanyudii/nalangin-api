@@ -218,8 +218,8 @@ input CreateUserBankInput {
 }
 
 input UpdateUserBankInput {
-  bankName: String
-  bankNumber: String
+  bankName: String!
+  bankNumber: String!
   id: String!
 }
 

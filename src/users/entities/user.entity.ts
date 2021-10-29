@@ -9,9 +9,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { IUser } from '../../@interfaces/users/entities/user.entity';
+
 @ObjectType()
 @Entity({ name: 'users' })
-export class User {
+export class User implements IUser {
   @Field()
   @PrimaryGeneratedColumn('uuid')
   id?: string;

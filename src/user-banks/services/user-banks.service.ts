@@ -1,19 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { IUserBank } from '../../@interfaces/user-banks/entities/user-bank.entity';
+import { IUserBanksService } from '../../@interfaces/user-banks/services/user-banks.service';
 import { CreateUserBankInput } from '../dto/create-user-bank.input';
 import { UpdateUserBankInput } from '../dto/update-user-bank.input';
-import { UserBank } from '../entities/user-bank.entity';
 import { UserBankRepository } from '../repositories/user-bank.repository';
 
 @Injectable()
-export class UserBanksService {
+export class UserBanksService implements IUserBanksService {
   constructor(private readonly userBankRepository: UserBankRepository) {}
 
-  async findAll(userId: string): Promise<UserBank[]> {
+  async findAll(userId: string): Promise<IUserBank[]> {
     return this.userBankRepository.find({ userId });
   }
 
-  async findOne(userId: string, id: string): Promise<UserBank> {
+  async findOne(userId: string, id: string): Promise<IUserBank> {
     const userBank = await this.userBankRepository.findOne({ userId, id });
     if (!userBank) {
       throw new NotFoundException();
@@ -25,7 +26,7 @@ export class UserBanksService {
   async create(
     userId: string,
     createUserBankInput: CreateUserBankInput,
-  ): Promise<UserBank> {
+  ): Promise<IUserBank> {
     const { bankName, bankNumber } = createUserBankInput;
     return this.userBankRepository.save({
       userId,
@@ -38,7 +39,7 @@ export class UserBanksService {
     userId: string,
     id: string,
     updateUserBankInput: UpdateUserBankInput,
-  ): Promise<UserBank> {
+  ): Promise<IUserBank> {
     const userBank = await this.userBankRepository.findOne({ userId, id });
     if (!userBank) {
       throw new NotFoundException();
@@ -53,7 +54,7 @@ export class UserBanksService {
     });
   }
 
-  async remove(userId: string, id: string): Promise<UserBank> {
+  async remove(userId: string, id: string): Promise<IUserBank> {
     const userBank = await this.userBankRepository.findOne({ userId, id });
 
     if (!userBank) {

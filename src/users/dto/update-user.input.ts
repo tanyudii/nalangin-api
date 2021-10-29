@@ -9,11 +9,12 @@ import {
   IsUUID,
 } from 'class-validator';
 
+import { IUpdateUserInput } from '../../@interfaces/users/dto/update-user.input';
 import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
 import { IsUserPhoneNumberUnique } from '../rules/user-phone-number-unique.rule';
 
 @InputType()
-export class UpdateUserInput {
+export class UpdateUserInput implements IUpdateUserInput {
   @Field()
   @IsNotEmpty()
   @IsUUID()

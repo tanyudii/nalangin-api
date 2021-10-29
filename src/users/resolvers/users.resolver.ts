@@ -2,13 +2,14 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
+import { IUserResolver } from '../../@interfaces/users/resolvers/users.resolver';
 import { CreateUserInput } from '../dto/create-user.input';
 import { UpdateUserInput } from '../dto/update-user.input';
 import { User } from '../entities/user.entity';
 import { UsersService } from '../services/users.service';
 
 @Resolver(() => User)
-export class UsersResolver {
+export class UsersResolver implements IUserResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(JwtGqlGuard)

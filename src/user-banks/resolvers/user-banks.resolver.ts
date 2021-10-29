@@ -4,13 +4,15 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
+import { IUserBank } from '../../@interfaces/user-banks/entities/user-bank.entity';
+import { IUserBanksResolver } from '../../@interfaces/user-banks/resolvers/user-banks.resolver';
 import { CreateUserBankInput } from '../dto/create-user-bank.input';
 import { UpdateUserBankInput } from '../dto/update-user-bank.input';
 import { UserBank } from '../entities/user-bank.entity';
 import { UserBanksService } from '../services/user-banks.service';
 
 @Resolver(() => UserBank)
-export class UserBanksResolver {
+export class UserBanksResolver implements IUserBanksResolver {
   constructor(private readonly userBanksService: UserBanksService) {}
 
   @UseGuards(JwtGqlGuard)
@@ -18,13 +20,13 @@ export class UserBanksResolver {
   async createUserBank(
     @CurrentUser() currentUser: IUser,
     @Args('createUserBankInput') createUserBankInput: CreateUserBankInput,
-  ): Promise<UserBank> {
+  ): Promise<IUserBank> {
     return this.userBanksService.create(currentUser.id, createUserBankInput);
   }
 
   @UseGuards(JwtGqlGuard)
   @Query(() => [UserBank], { name: 'userBanks' })
-  async findAll(@CurrentUser() currentUser: IUser): Promise<UserBank[]> {
+  async findAll(@CurrentUser() currentUser: IUser): Promise<IUserBank[]> {
     return this.userBanksService.findAll(currentUser.id);
   }
 
@@ -33,7 +35,7 @@ export class UserBanksResolver {
   async findOne(
     @CurrentUser() currentUser: IUser,
     @Args('id') id: string,
-  ): Promise<UserBank> {
+  ): Promise<IUserBank> {
     return this.userBanksService.findOne(currentUser.id, id);
   }
 
@@ -42,7 +44,7 @@ export class UserBanksResolver {
   async updateUserBank(
     @CurrentUser() currentUser: IUser,
     @Args('updateUserBankInput') updateUserBankInput: UpdateUserBankInput,
-  ): Promise<UserBank> {
+  ): Promise<IUserBank> {
     return this.userBanksService.update(
       currentUser.id,
       updateUserBankInput.id,
@@ -55,7 +57,7 @@ export class UserBanksResolver {
   async removeUserBank(
     @CurrentUser() currentUser: IUser,
     @Args('id') id: string,
-  ): Promise<UserBank> {
+  ): Promise<IUserBank> {
     return this.userBanksService.remove(currentUser.id, id);
   }
 }

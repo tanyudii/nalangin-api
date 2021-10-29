@@ -9,11 +9,12 @@ import {
   MinLength,
 } from 'class-validator';
 
+import { ICreateUserInput } from '../../@interfaces/users/dto/create-user.input';
 import { IsUserEmailUnique } from '../rules/user-email-unique.rule';
 import { IsUserPhoneNumberUnique } from '../rules/user-phone-number-unique.rule';
 
 @InputType()
-export class CreateUserInput {
+export class CreateUserInput implements ICreateUserInput {
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -22,7 +23,9 @@ export class CreateUserInput {
   @Field()
   @IsNotEmpty()
   @IsUserPhoneNumberUnique()
-  @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
+  @IsPhoneNumber(undefined, {
+    message: '$property number must be a valid format',
+  })
   phoneNumber: string;
 
   @Field()

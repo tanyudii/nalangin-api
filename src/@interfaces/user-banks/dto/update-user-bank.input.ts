@@ -1,4 +1,5 @@
-export interface ICreateUserBankInput {
-  bankName: string;
-  bankNumber: string;
+import { ICreateUserBankInput } from './create-user-bank.input';
+
+export interface IUpdateUserBankInput extends ICreateUserBankInput {
+  id: string;
 }
