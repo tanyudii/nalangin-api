@@ -10,7 +10,7 @@ import {
 import { Payment } from './payment.entity';
 
 @ObjectType()
-@Entity({ name: 'payment_items' })
+@Entity('payment_items')
 export class PaymentItem {
   @PrimaryGeneratedColumn('uuid')
   id?: string;

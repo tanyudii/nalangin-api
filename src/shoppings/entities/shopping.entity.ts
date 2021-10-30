@@ -13,7 +13,7 @@ import { User } from '../../users/entities/user.entity';
 import { ShoppingItem } from './shopping-item.entity';
 
 @ObjectType()
-@Entity({ name: 'shoppings' })
+@Entity('shoppings')
 export class Shopping {
   @Field()
   @PrimaryGeneratedColumn('uuid')
