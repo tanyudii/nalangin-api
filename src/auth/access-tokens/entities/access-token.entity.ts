@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'access_tokens' })
+@Entity('access_tokens')
 export class AccessToken {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
