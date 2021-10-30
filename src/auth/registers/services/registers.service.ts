@@ -8,6 +8,8 @@ import { RegisterOtpInput } from '../dto/register-otp.input';
 import { RegisterInput } from '../dto/register.input';
 import { RegisterOtpResponse } from '../types/register-otp-response.type';
 
+const otpSubjectTypeName = 'register_user';
+
 @Injectable()
 export class RegistersService {
   constructor(
@@ -21,20 +23,20 @@ export class RegistersService {
     const { phoneNumber } = registerOtpInput;
 
     const otp = await this.otpService.create({
-      subjectType: 'register',
+      subjectType: otpSubjectTypeName,
       subjectId: phoneNumber,
       phoneNumber: phoneNumber,
       expiresIn: 120,
     });
 
-    return this.registerOtpFactory(`Successfully send OTP.`, otp);
+    return this.registerOtpFactory(`We have sent your otp!`, otp);
   }
 
   async register(registerInput: RegisterInput): Promise<DefaultMessage> {
-    const { name, phoneNumber, password, otp } = registerInput;
+    const { name, phoneNumber, otp } = registerInput;
 
     const isValidOtp = await this.otpService.isValidExpiry(
-      'register',
+      otpSubjectTypeName,
       phoneNumber,
       phoneNumber,
       otp,
@@ -47,12 +49,16 @@ export class RegistersService {
     await this.usersService.create({
       name,
       phoneNumber,
-      password,
     });
 
-    await this.otpService.revoke('register', phoneNumber, phoneNumber, otp);
+    await this.otpService.revoke(
+      otpSubjectTypeName,
+      phoneNumber,
+      phoneNumber,
+      otp,
+    );
 
-    return this.registerMessageFactory(`Hi ${name} :)`);
+    return this.registerMessageFactory(`Hi ${name}`);
   }
 
   protected registerOtpFactory(

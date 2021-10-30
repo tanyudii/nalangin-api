@@ -1,10 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import {
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 
 import { IsUserPhoneNumberUnique } from '../../../users/rules/user-phone-number-unique.rule';
 
@@ -14,12 +9,6 @@ export class RegisterInput {
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(8)
-  password: string;
 
   @Field()
   @IsNotEmpty()

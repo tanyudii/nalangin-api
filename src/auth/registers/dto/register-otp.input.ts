@@ -6,8 +6,10 @@ import { IsUserPhoneNumberUnique } from '../../../users/rules/user-phone-number-
 @InputType()
 export class RegisterOtpInput {
   @Field()
-  @IsNotEmpty()
+  @IsNotEmpty({})
   @IsUserPhoneNumberUnique()
-  @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
+  @IsPhoneNumber(undefined, {
+    message: 'phone number must be a valid format',
+  })
   phoneNumber: string;
 }
