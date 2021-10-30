@@ -59,7 +59,6 @@ type GroupUser {
   updatedAt: DateTime!
   deletedAt: DateTime
   group: Group!
-  user: User!
 }
 
 type Shopping {
