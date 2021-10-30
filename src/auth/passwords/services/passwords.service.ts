@@ -3,9 +3,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { DefaultMessage } from '../../../@graphql/types/default-message.type';
 import { UsersService } from '../../../users/services/users.service';
+import { PasswordResetsService } from '../../password-resets/services/password-resets.service';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
-import { PasswordResetsService } from './password-resets.service';
 
 @Injectable()
 export class PasswordsService {
@@ -19,6 +19,7 @@ export class PasswordsService {
     forgotPasswordInput: ForgotPasswordInput,
   ): Promise<DefaultMessage> {
     const { email } = forgotPasswordInput;
+
     try {
       const user = await this.usersService.findOneByEmail(email);
 
@@ -38,7 +39,7 @@ export class PasswordsService {
     } catch (e) {}
 
     return this.passwordMessageFactory(
-      "We'll send the password reset when the email is registered.",
+      'We have send password reset link to registered email!',
     );
   }
 
@@ -53,7 +54,7 @@ export class PasswordsService {
     );
 
     if (!isValidPasswordReset) {
-      throw new BadRequestException('The password token is invalid.');
+      throw new BadRequestException('The password reset token is invalid.');
     }
 
     const user = await this.usersService.findOneByEmail(email);
@@ -63,7 +64,7 @@ export class PasswordsService {
       this.usersService.updatePassword(user.id, password),
     ]);
 
-    return this.passwordMessageFactory('Successfully update password.');
+    return this.passwordMessageFactory('Your password has been reset!');
   }
 
   protected passwordMessageFactory(message = 'Success'): DefaultMessage {

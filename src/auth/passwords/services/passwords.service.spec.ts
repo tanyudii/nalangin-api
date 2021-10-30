@@ -4,8 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../../../@database/database.module';
 import { MailerModule } from '../../../@mailer/mailer.module';
 import { UsersModule } from '../../../users/users.module';
-import { PasswordResetRepository } from '../repositories/password-reset.repository';
-import { PasswordResetsService } from './password-resets.service';
+import { PasswordResetsModule } from '../../password-resets/password-resets.module';
+import { PasswordResetRepository } from '../../password-resets/repositories/password-reset.repository';
+import { PasswordResetsService } from '../../password-resets/services/password-resets.service';
 import { PasswordsService } from './passwords.service';
 
 describe('PasswordsService', () => {
@@ -15,8 +16,9 @@ describe('PasswordsService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         DatabaseModule,
-        MailerModule,
         TypeOrmModule.forFeature([PasswordResetRepository]),
+        MailerModule,
+        PasswordResetsModule,
         UsersModule,
       ],
       providers: [PasswordResetsService, PasswordsService],
