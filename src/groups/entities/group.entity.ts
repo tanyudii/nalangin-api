@@ -9,11 +9,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { User } from '../../users/entities/user.entity';
 import { GroupUser } from './group-user.entity';
 
 @ObjectType()
-@Entity({ name: 'groups' })
+@Entity('groups')
 export class Group {
   @Field()
   @PrimaryGeneratedColumn('uuid')
@@ -38,7 +37,4 @@ export class Group {
   @Field(() => [GroupUser])
   @OneToMany(() => GroupUser, (groupUser) => groupUser.group)
   groupUsers: GroupUser[];
-
-  @Field(() => [User])
-  users: User[];
 }

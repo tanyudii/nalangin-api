@@ -10,7 +10,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { User } from '../../users/entities/user.entity';
 import { Group } from './group.entity';
 
 export enum RoleType {
@@ -19,7 +18,7 @@ export enum RoleType {
 }
 
 @ObjectType()
-@Entity({ name: 'group_users' })
+@Entity('group_users')
 export class GroupUser {
   @Field()
   @PrimaryGeneratedColumn('uuid')
@@ -56,7 +55,4 @@ export class GroupUser {
     onUpdate: 'CASCADE',
   })
   group: Group;
-
-  @Field(() => User)
-  user: User;
 }
