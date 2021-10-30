@@ -28,10 +28,16 @@ type RegisterOtpResponse {
   availableNextAt: DateTime!
 }
 
-type Token {
+type TokenResponse {
   accessToken: String!
   expiresAt: Int!
   refreshToken: String
+}
+
+type CreateTokenOtpResponseType {
+  message: String!
+  increment: Int!
+  availableNextAt: DateTime!
 }
 
 type Group {
@@ -126,8 +132,6 @@ type UserBank {
 }
 
 type Query {
-  users: [User!]!
-  user(id: String!): User!
   userBanks: [UserBank!]!
   userBank(id: String!): UserBank!
   shoppings: [Shopping!]!
@@ -139,11 +143,10 @@ type Query {
 }
 
 type Mutation {
-  createToken(createTokenInput: CreateTokenInput!): Token!
-  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): Token!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: String!): User!
+  createToken(createTokenInput: CreateTokenInput!): TokenResponse!
+  createTokenByOtp(createTokenByOtpInput: CreateTokenByOtpInput!): TokenResponse!
+  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): TokenResponse!
+  createTokenOtp(createTokenOtpInput: CreateTokenOtpInput!): CreateTokenOtpResponseType!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): DefaultMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): DefaultMessage!
   registerOtp(registerOtpInput: RegisterOtpInput!): RegisterOtpResponse!
@@ -170,25 +173,18 @@ input CreateTokenInput {
   password: String!
 }
 
+input CreateTokenByOtpInput {
+  username: String!
+  otp: String!
+}
+
 input CreateTokenByRefreshTokenInput {
   accessToken: String!
   refreshToken: String!
 }
 
-input CreateUserInput {
-  name: String!
-  phoneNumber: String!
-  password: String!
-  email: String
-  avatar: String
-}
-
-input UpdateUserInput {
-  id: String!
-  name: String!
-  phoneNumber: String!
-  email: String
-  avatar: String
+input CreateTokenOtpInput {
+  username: String!
 }
 
 input ForgotPasswordInput {
@@ -207,7 +203,6 @@ input RegisterOtpInput {
 
 input RegisterInput {
   name: String!
-  password: String!
   phoneNumber: String!
   otp: String!
 }

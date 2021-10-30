@@ -2,14 +2,9 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class CreateTokenByRefreshTokenInput {
+export class CreateTokenOtpInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  accessToken: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  refreshToken: string;
+  username: string;
 }

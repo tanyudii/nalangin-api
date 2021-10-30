@@ -46,7 +46,7 @@ patchTypeORMRepositoryWithBaseRepository();
   //is used for allow custom pipes attribute
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  //is used for exclude attribute in entity
+  //is used for exclude attribute in entities
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(appPort, appHost).then(() => {

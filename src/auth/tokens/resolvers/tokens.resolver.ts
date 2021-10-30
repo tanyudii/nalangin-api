@@ -1,28 +1,46 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
+import { CreateTokenByOtpInput } from '../dto/create-token-by-otp.input';
 import { CreateTokenByRefreshTokenInput } from '../dto/create-token-by-refresh-token.input';
+import { CreateTokenOtpInput } from '../dto/create-token-otp.input';
 import { CreateTokenInput } from '../dto/create-token.input';
-import { Token } from '../entities/token.entity';
 import { TokensService } from '../services/tokens.service';
+import { CreateTokenOtpResponseType } from '../types/create-token-otp-response.type';
+import { TokenResponse } from '../types/token-response.type';
 
-@Resolver(() => Token)
+@Resolver()
 export class TokensResolver {
   constructor(private readonly tokensService: TokensService) {}
 
-  @Mutation(() => Token)
+  @Mutation(() => TokenResponse)
   async createToken(
     @Args('createTokenInput') createTokenInput: CreateTokenInput,
-  ): Promise<Token> {
-    return this.tokensService.create(createTokenInput);
+  ): Promise<TokenResponse> {
+    return this.tokensService.createToken(createTokenInput);
   }
 
-  @Mutation(() => Token)
+  @Mutation(() => TokenResponse)
+  async createTokenByOtp(
+    @Args('createTokenByOtpInput') createTokenByOtpInput: CreateTokenByOtpInput,
+  ): Promise<TokenResponse> {
+    return this.tokensService.createTokenByOtp(createTokenByOtpInput);
+  }
+
+  @Mutation(() => TokenResponse)
   async createTokenByRefreshToken(
     @Args('createTokenByRefreshTokenInput')
     createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput,
-  ): Promise<Token> {
+  ): Promise<TokenResponse> {
     return this.tokensService.createByRefreshToken(
       createTokenByRefreshTokenInput,
     );
+  }
+
+  @Mutation(() => CreateTokenOtpResponseType)
+  async createTokenOtp(
+    @Args('createTokenOtpInput')
+    createTokenOtpInput: CreateTokenOtpInput,
+  ): Promise<CreateTokenOtpResponseType> {
+    return this.tokensService.createTokenOtp(createTokenOtpInput);
   }
 }

@@ -79,8 +79,8 @@ export class UsersService {
       name,
       phoneNumber,
       email,
-      password: await hashPassword(password),
       avatar,
+      ...(password ? { password: await hashPassword(password) } : {}),
     });
   }
 

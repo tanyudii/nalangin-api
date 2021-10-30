@@ -23,7 +23,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
           synchronize: !isProduction,
           dropSchema: false,
           logging: false,
-          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+          entities: [__dirname + '/../**/*.entity.{js,ts}'],
           timezone: '+00:00',
         };
       },
