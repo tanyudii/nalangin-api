@@ -41,7 +41,10 @@ export class TokensService {
     try {
       user = isEmail(username)
         ? await this.usersService.findOneByEmailAndPassword(username, password)
-        : await this.usersService.findOneByPhoneAndPassword(username, password);
+        : await this.usersService.findOneByPhoneNumberAndPassword(
+            username,
+            password,
+          );
     } catch (e) {
       exceptionUser = e;
     }
