@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { jwtExpiresIn, jwtSecret } from '../../@common/constants/jwt.constant';
 import { OtpModule } from '../../otp/otp.module';
 import { UsersModule } from '../../users/users.module';
 import { AccessTokensModule } from '../access-tokens/access-tokens.module';
@@ -14,9 +14,13 @@ import { TokensService } from './services/tokens.service';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: jwtSecret,
-      signOptions: { expiresIn: jwtExpiresIn },
+    JwtModule.registerAsync({
+      imports: [ConfigModule.forRoot()],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') },
+      }),
     }),
     TypeOrmModule.forFeature([AccessTokenRepository, RefreshTokenRepository]),
     AccessTokensModule,
