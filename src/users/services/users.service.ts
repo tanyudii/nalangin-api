@@ -60,7 +60,7 @@ export class UsersService {
     return user;
   }
 
-  async findOneByPhoneAndPassword(
+  async findOneByPhoneNumberAndPassword(
     phoneNumber: string,
     password: string,
   ): Promise<User> {
