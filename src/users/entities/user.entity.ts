@@ -32,7 +32,7 @@ export class User {
   @Column({ nullable: true })
   password?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   avatar?: string;
 
