@@ -6,7 +6,6 @@ import { UsersModule } from '../../users/users.module';
 import { GroupUserRepository } from '../repositories/group-user.repository';
 import { GroupRepository } from '../repositories/group.repository';
 import { GroupUsersService } from '../services/group-users.service';
-import { GroupsService } from '../services/groups.service';
 import { GroupsLoader } from './groups.loader';
 
 describe('GroupsLoader', () => {
@@ -19,7 +18,7 @@ describe('GroupsLoader', () => {
         TypeOrmModule.forFeature([GroupRepository, GroupUserRepository]),
         UsersModule,
       ],
-      providers: [GroupsLoader, GroupsService, GroupUsersService],
+      providers: [GroupsLoader, GroupUsersService],
     }).compile();
 
     loader = await module.resolve<GroupsLoader>(GroupsLoader);
