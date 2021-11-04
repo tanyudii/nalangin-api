@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { User } from '../../users/entities/user.entity';
 import { GroupUser } from './group-user.entity';
 
 @ObjectType()
@@ -37,4 +38,7 @@ export class Group {
   @Field(() => [GroupUser])
   @OneToMany(() => GroupUser, (groupUser) => groupUser.group)
   groupUsers: GroupUser[];
+
+  @Field(() => [User])
+  users: User[];
 }

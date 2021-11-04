@@ -16,7 +16,7 @@ export class PasswordReset {
   @Column()
   email: string;
 
-  @Column('datetime')
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   expiresAt: Date;
 
   @CreateDateColumn()

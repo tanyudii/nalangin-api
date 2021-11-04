@@ -49,10 +49,7 @@ export class GroupsLoader {
         );
 
         return listGroupUsers.map((groupUser) => {
-          Object.assign(groupUser, {
-            user: users.find((user) => user.id == groupUser.userId),
-          });
-
+          groupUser.user = users.find((user) => user.id == groupUser.userId);
           return groupUser;
         });
       });

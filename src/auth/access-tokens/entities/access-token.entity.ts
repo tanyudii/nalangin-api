@@ -17,7 +17,7 @@ export class AccessToken {
   @Column('boolean', { default: '0' })
   revoked: boolean;
 
-  @Column('datetime')
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   expiresAt: Date;
 
   @CreateDateColumn()

@@ -1,11 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { In } from 'typeorm';
 
 import { ShoppingItem } from '../../shoppings/entities/shopping-item.entity';
 import { ShoppingItemsService } from '../../shoppings/services/shopping-items.service';
 import { CreatePaymentInput } from '../dto/create-payment.input';
 import { UpdatePaymentInput } from '../dto/update-payment.input';
-import { PaymentItem } from '../entities/payment-item.entity';
 import { Payment } from '../entities/payment.entity';
 import { PaymentItemRepository } from '../repositories/payment-item.repository';
 import { PaymentRepository } from '../repositories/payment.repository';
@@ -30,16 +28,6 @@ export class PaymentsService {
     }
 
     return payment;
-  }
-
-  async findPaymentItemByPaymentIds(
-    paymentIds: string[],
-  ): Promise<PaymentItem[]> {
-    return this.paymentItemRepository.find({
-      where: {
-        paymentId: In(paymentIds),
-      },
-    });
   }
 
   async create(

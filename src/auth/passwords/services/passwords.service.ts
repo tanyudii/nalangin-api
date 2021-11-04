@@ -1,7 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { DefaultMessage } from '../../../@graphql/types/default-message.type';
+import { DefaultMessage } from '../../../@common/graphql/types/default-message.type';
 import { UsersService } from '../../../users/services/users.service';
 import { PasswordResetsService } from '../../password-resets/services/password-resets.service';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
@@ -18,7 +18,8 @@ export class PasswordsService {
   async forgotPassword(
     forgotPasswordInput: ForgotPasswordInput,
   ): Promise<DefaultMessage> {
-    const { email } = forgotPasswordInput;
+    const { email, url } = forgotPasswordInput;
+    const urlObj = new URL(url);
 
     try {
       const user = await this.usersService.findOneByEmail(email);
@@ -28,12 +29,14 @@ export class PasswordsService {
         email: user.email,
       });
 
+      urlObj.searchParams.set('token', passwordReset.id);
+
       await this.mailerService.sendMail({
         to: `${user.name} <${user.email}>`,
         subject: 'Password Reset',
         html: `
           <p>Click Here for Reset </p>
-          <a href="http://localhost:8000/reset-password?token=${passwordReset.id}">Reset Password</a>
+          <a href="${urlObj.toString()}">Reset Password</a>
         `,
       });
     } catch (e) {}

@@ -25,10 +25,10 @@ export class Otp {
   @Column('integer')
   increment: number;
 
-  @Column('datetime')
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   expiresAt: Date;
 
-  @Column('datetime')
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   availableNextAt: Date;
 
   @CreateDateColumn()

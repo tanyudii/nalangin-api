@@ -7,7 +7,7 @@ type User {
   name: String!
   phoneNumber: String!
   email: String!
-  avatar: String!
+  avatar: String
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
@@ -59,6 +59,7 @@ type GroupUser {
   updatedAt: DateTime!
   deletedAt: DateTime
   group: Group!
+  user: User
 }
 
 type Shopping {
@@ -188,6 +189,7 @@ input CreateTokenOtpInput {
 
 input ForgotPasswordInput {
   email: String!
+  url: String!
 }
 
 input ResetPasswordInput {

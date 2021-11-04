@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
-import { DefaultMessage } from '../../../@graphql/types/default-message.type';
+import { DefaultMessage } from '../../../@common/graphql/types/default-message.type';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
 import { PasswordsService } from '../services/passwords.service';

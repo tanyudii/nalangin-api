@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { DefaultMessage } from '../../../@graphql/types/default-message.type';
+import { DefaultMessage } from '../../../@common/graphql/types/default-message.type';
 import { Otp } from '../../../otp/entities/otp.entity';
 import { OtpService } from '../../../otp/services/otp.service';
 import { UsersService } from '../../../users/services/users.service';

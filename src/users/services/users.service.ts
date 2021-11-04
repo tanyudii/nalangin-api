@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import * as gravatar from 'gravatar';
 
 import {
   comparePassword,
@@ -75,11 +76,15 @@ export class UsersService {
   async create(createUserInput: CreateUserInput): Promise<User> {
     const { name, phoneNumber, email, password, avatar } = createUserInput;
 
+    const gravatarUrl = email
+      ? gravatar.url(email, { protocol: 'https', s: '200', d: 'mm' })
+      : null;
+
     return this.userRepository.save({
       name,
       phoneNumber,
       email,
-      avatar,
+      avatar: avatar || gravatarUrl,
       ...(password ? { password: await hashPassword(password) } : {}),
     });
   }

@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
-import { DefaultMessage } from '../../../@graphql/types/default-message.type';
+import { DefaultMessage } from '../../../@common/graphql/types/default-message.type';
 import { RegisterOtpInput } from '../dto/register-otp.input';
 import { RegisterInput } from '../dto/register.input';
 import { RegistersService } from '../services/registers.service';

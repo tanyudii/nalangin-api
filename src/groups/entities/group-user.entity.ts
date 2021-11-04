@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { User } from '../../users/entities/user.entity';
 import { Group } from './group.entity';
 
 export enum RoleType {
@@ -55,4 +56,7 @@ export class GroupUser {
     onUpdate: 'CASCADE',
   })
   group: Group;
+
+  @Field(() => User, { nullable: true })
+  user: User;
 }
