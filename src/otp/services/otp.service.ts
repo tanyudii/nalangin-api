@@ -3,28 +3,25 @@ import * as moment from 'moment';
 import * as pluralize from 'pluralize';
 import { DeleteResult, LessThan, MoreThan } from 'typeorm';
 
-import { CreateOtpDto } from '../dtos/create-otp.dto';
+import { CreateOtpInput } from '../dtos/create-otp.input';
 import { Otp } from '../entities/otp.entity';
 import { OtpRepository } from '../repositories/otp.repository';
+import { OtpResponse } from '../types/otp-response.type';
 
 @Injectable()
 export class OtpService {
   constructor(private readonly otpRepository: OtpRepository) {}
 
-  async create(createOtpDto: CreateOtpDto): Promise<Otp> {
-    const {
-      subjectType,
-      subjectId,
-      phoneNumber,
-      expiresIn = 120,
-    } = createOtpDto;
+  async create(createOtpDto: CreateOtpInput): Promise<OtpResponse> {
+    const { subjectType, subjectId, phoneNumber } = createOtpDto;
 
+    const expiresIn = 120;
     const increment = 15;
     const expiresAt: Date = moment().add(expiresIn, 'seconds').toDate();
 
     await this.removeExpired();
 
-    const currentOtp = await this.otpRepository.findOne({
+    let currentOtp = await this.otpRepository.findOne({
       subjectId,
       subjectType,
       phoneNumber,
@@ -46,12 +43,14 @@ export class OtpService {
 
       const nextIncrement = currentOtp.increment + increment;
 
-      return this.otpRepository.save({
+      currentOtp = await this.otpRepository.save({
         ...currentOtp,
         increment: nextIncrement,
         expiresAt,
         availableNextAt: moment().add(nextIncrement, 'seconds').toDate(),
       });
+
+      return this.otpResponseFactory('We have sent otp!', currentOtp);
     }
 
     const code = await this.generateCodeNumber(
@@ -60,7 +59,7 @@ export class OtpService {
       phoneNumber,
     );
 
-    return this.otpRepository.save({
+    const otp = await this.otpRepository.save({
       subjectId,
       subjectType,
       phoneNumber,
@@ -69,6 +68,8 @@ export class OtpService {
       expiresAt,
       availableNextAt: moment().add(increment, 'seconds').toDate(),
     });
+
+    return this.otpResponseFactory('We have sent otp!', otp);
   }
 
   async revoke(
@@ -129,5 +130,13 @@ export class OtpService {
 
   protected async removeExpired(): Promise<DeleteResult> {
     return this.otpRepository.delete({ expiresAt: LessThan(new Date()) });
+  }
+
+  protected otpResponseFactory(message = 'Success', otp: Otp): OtpResponse {
+    const otpResponse = new OtpResponse();
+    otpResponse.message = message;
+    otpResponse.increment = otp.increment;
+    otpResponse.availableNextAt = otp.availableNextAt;
+    return otpResponse;
   }
 }

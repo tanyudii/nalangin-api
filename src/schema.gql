@@ -22,7 +22,7 @@ type DefaultMessage {
   message: String!
 }
 
-type RegisterOtpResponse {
+type OtpResponse {
   message: String!
   increment: Int!
   availableNextAt: DateTime!
@@ -32,12 +32,6 @@ type TokenResponse {
   accessToken: String!
   expiresAt: Int!
   refreshToken: String
-}
-
-type CreateTokenOtpResponseType {
-  message: String!
-  increment: Int!
-  availableNextAt: DateTime!
 }
 
 type Group {
@@ -121,6 +115,12 @@ type PaymentItem {
   total: Float!
 }
 
+type Profile {
+  id: String!
+  name: String!
+  phoneNumber: String!
+}
+
 type UserBank {
   id: String!
   userId: String!
@@ -144,12 +144,10 @@ type Query {
 
 type Mutation {
   createToken(createTokenInput: CreateTokenInput!): TokenResponse!
-  createTokenByOtp(createTokenByOtpInput: CreateTokenByOtpInput!): TokenResponse!
-  createTokenByRefreshToken(createTokenByRefreshTokenInput: CreateTokenByRefreshTokenInput!): TokenResponse!
-  createTokenOtp(createTokenOtpInput: CreateTokenOtpInput!): CreateTokenOtpResponseType!
+  refreshToken(refreshTokenInput: RefreshTokenInput!): TokenResponse!
+  createOtp(createOtpInput: CreateOtpInput!): OtpResponse!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): DefaultMessage!
   resetPassword(resetPasswordInput: ResetPasswordInput!): DefaultMessage!
-  registerOtp(registerOtpInput: RegisterOtpInput!): RegisterOtpResponse!
   register(registerInput: RegisterInput!): DefaultMessage!
   createUserBank(createUserBankInput: CreateUserBankInput!): UserBank!
   updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBank!
@@ -166,25 +164,24 @@ type Mutation {
   exitGroup(id: String!): Group!
   inviteGroupUser(inviteGroupUserInput: InviteGroupUserInput!): Group!
   removeGroupUser(removeGroupUserInput: RemoveGroupUserInput!): Group!
+  myProfile: Profile!
 }
 
 input CreateTokenInput {
   username: String!
   password: String!
+  isOtp: Boolean!
 }
 
-input CreateTokenByOtpInput {
-  username: String!
-  otp: String!
-}
-
-input CreateTokenByRefreshTokenInput {
+input RefreshTokenInput {
   accessToken: String!
   refreshToken: String!
 }
 
-input CreateTokenOtpInput {
-  username: String!
+input CreateOtpInput {
+  subjectType: String!
+  subjectId: String!
+  phoneNumber: String!
 }
 
 input ForgotPasswordInput {
@@ -196,10 +193,6 @@ input ResetPasswordInput {
   email: String!
   token: String!
   password: String!
-}
-
-input RegisterOtpInput {
-  phoneNumber: String!
 }
 
 input RegisterInput {

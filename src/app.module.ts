@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 
@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { GroupsModule } from './groups/groups.module';
 import { OtpModule } from './otp/otp.module';
 import { PaymentsModule } from './payments/payments.module';
+import { ProfileModule } from './profile/profile.module';
 import { ShoppingsModule } from './shoppings/shoppings.module';
 import { UserBanksModule } from './user-banks/user-banks.module';
 import { UsersModule } from './users/users.module';
@@ -20,8 +21,13 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       validationSchema: configValidationSchema,
     }),
-    GraphQLModule.forRoot({
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule.forRoot()],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        playground: configService.get<string>('NODE_ENV') !== 'production',
+      }),
     }),
     DatabaseModule,
     MailerModule,
@@ -32,6 +38,7 @@ import { UsersModule } from './users/users.module';
     PaymentsModule,
     OtpModule,
     GroupsModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}

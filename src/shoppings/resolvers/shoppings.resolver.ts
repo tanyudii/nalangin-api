@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
-import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { GqlCurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
 import { User } from '../../users/entities/user.entity';
@@ -29,7 +29,7 @@ export class ShoppingsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Shopping)
   async createShopping(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('createShoppingInput') createShoppingInput: CreateShoppingInput,
   ): Promise<Shopping> {
     return this.shoppingsService.create(currentUser.id, createShoppingInput);
@@ -37,14 +37,14 @@ export class ShoppingsResolver {
 
   @UseGuards(JwtGqlGuard)
   @Query(() => [Shopping], { name: 'shoppings' })
-  async findAll(@CurrentUser() currentUser: IUser): Promise<Shopping[]> {
+  async findAll(@GqlCurrentUser() currentUser: IUser): Promise<Shopping[]> {
     return this.shoppingsService.findAll(currentUser.id);
   }
 
   @UseGuards(JwtGqlGuard)
   @Query(() => Shopping, { name: 'shopping' })
   async findOne(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
   ): Promise<Shopping> {
     return this.shoppingsService.findOne(currentUser.id, id);
@@ -53,7 +53,7 @@ export class ShoppingsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Shopping)
   async updateShopping(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('updateShoppingInput') updateShoppingInput: UpdateShoppingInput,
   ): Promise<Shopping> {
     return this.shoppingsService.update(
@@ -66,7 +66,7 @@ export class ShoppingsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Shopping)
   async removeShopping(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
   ): Promise<Shopping> {
     return this.shoppingsService.remove(currentUser.id, id);

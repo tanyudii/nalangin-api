@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateTokenInput {
@@ -11,6 +11,10 @@ export class CreateTokenInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
   password: string;
+
+  @Field(() => Boolean)
+  @IsOptional()
+  @IsBoolean()
+  isOtp?: boolean;
 }

@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { GqlCurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
 import { CreateUserBankInput } from '../dto/create-user-bank.input';
@@ -16,7 +16,7 @@ export class UserBanksResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => UserBank)
   async createUserBank(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('createUserBankInput') createUserBankInput: CreateUserBankInput,
   ): Promise<UserBank> {
     return this.userBanksService.create(currentUser.id, createUserBankInput);
@@ -24,14 +24,14 @@ export class UserBanksResolver {
 
   @UseGuards(JwtGqlGuard)
   @Query(() => [UserBank], { name: 'userBanks' })
-  async findAll(@CurrentUser() currentUser: IUser): Promise<UserBank[]> {
+  async findAll(@GqlCurrentUser() currentUser: IUser): Promise<UserBank[]> {
     return this.userBanksService.findAll(currentUser.id);
   }
 
   @UseGuards(JwtGqlGuard)
   @Query(() => UserBank, { name: 'userBank' })
   async findOne(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
   ): Promise<UserBank> {
     return this.userBanksService.findOne(currentUser.id, id);
@@ -40,7 +40,7 @@ export class UserBanksResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => UserBank)
   async updateUserBank(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('updateUserBankInput') updateUserBankInput: UpdateUserBankInput,
   ): Promise<UserBank> {
     return this.userBanksService.update(
@@ -53,7 +53,7 @@ export class UserBanksResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => UserBank)
   async removeUserBank(
-    @CurrentUser() currentUser: IUser,
+    @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
   ): Promise<UserBank> {
     return this.userBanksService.remove(currentUser.id, id);

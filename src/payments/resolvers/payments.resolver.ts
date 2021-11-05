@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
-import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { GqlCurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
 import { User } from '../../users/entities/user.entity';
@@ -29,7 +29,7 @@ export class PaymentsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Payment)
   async createPayment(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
   ): Promise<Payment> {
     return this.paymentsService.create(user.id, createPaymentInput);
@@ -37,20 +37,20 @@ export class PaymentsResolver {
 
   @UseGuards(JwtGqlGuard)
   @Query(() => [Payment], { name: 'payments' })
-  findAll(@CurrentUser() user: IUser) {
+  findAll(@GqlCurrentUser() user: IUser) {
     return this.paymentsService.findAll(user.id);
   }
 
   @UseGuards(JwtGqlGuard)
   @Query(() => Payment, { name: 'payment' })
-  findOne(@CurrentUser() user: IUser, @Args('id') id: string) {
+  findOne(@GqlCurrentUser() user: IUser, @Args('id') id: string) {
     return this.paymentsService.findOne(user.id, id);
   }
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Payment)
   updatePayment(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('updatePaymentInput') updatePaymentInput: UpdatePaymentInput,
   ) {
     return this.paymentsService.update(
@@ -62,7 +62,7 @@ export class PaymentsResolver {
 
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Payment)
-  removePayment(@CurrentUser() user: IUser, @Args('id') id: string) {
+  removePayment(@GqlCurrentUser() user: IUser, @Args('id') id: string) {
     return this.paymentsService.remove(user.id, id);
   }
 

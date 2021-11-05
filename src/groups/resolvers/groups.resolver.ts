@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
-import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { GqlCurrentUser } from '../../@common/decorators/current-user.decorator';
 import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
 import { User } from '../../users/entities/user.entity';
@@ -31,7 +31,7 @@ export class GroupsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
   async createGroup(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('createGroupInput') createGroupInput: CreateGroupInput,
   ): Promise<Group> {
     return this.groupsService.create(user.id, createGroupInput);
@@ -39,14 +39,14 @@ export class GroupsResolver {
 
   @UseGuards(JwtGqlGuard)
   @Query(() => [Group], { name: 'groups' })
-  async findAll(@CurrentUser() user: IUser): Promise<Group[]> {
+  async findAll(@GqlCurrentUser() user: IUser): Promise<Group[]> {
     return this.groupsService.findAll(user.id);
   }
 
   @UseGuards(JwtGqlGuard)
   @Query(() => Group, { name: 'group' })
   async findOne(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('id') id: string,
   ): Promise<Group> {
     return this.groupsService.findOne(user.id, id);
@@ -55,7 +55,7 @@ export class GroupsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
   async updateGroup(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('updateGroupInput') updateGroupInput: UpdateGroupInput,
   ): Promise<Group> {
     return this.groupsService.update(
@@ -68,7 +68,7 @@ export class GroupsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
   async removeGroup(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('id') id: string,
   ): Promise<Group> {
     return this.groupsService.remove(user.id, id);
@@ -77,7 +77,7 @@ export class GroupsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
   async exitGroup(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('id') id: string,
   ): Promise<Group> {
     return this.groupsService.exit(user.id, id);
@@ -86,7 +86,7 @@ export class GroupsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
   async inviteGroupUser(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('inviteGroupUserInput') inviteGroupUserInput: InviteGroupUserInput,
   ): Promise<Group> {
     return this.groupsService.inviteGroupUser(
@@ -99,7 +99,7 @@ export class GroupsResolver {
   @UseGuards(JwtGqlGuard)
   @Mutation(() => Group)
   async removeGroupUser(
-    @CurrentUser() user: IUser,
+    @GqlCurrentUser() user: IUser,
     @Args('removeGroupUserInput') removeGroupUserInput: RemoveGroupUserInput,
   ): Promise<Group> {
     return this.groupsService.removeGroupUser(

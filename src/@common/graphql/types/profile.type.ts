@@ -3,7 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { IUser } from '../../interfaces/user.interface';
 
 @ObjectType()
-export class User implements IUser {
+export class Profile implements IUser {
   @Field()
   id: string;
 
