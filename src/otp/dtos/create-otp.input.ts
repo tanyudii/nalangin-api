@@ -2,14 +2,19 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class CreateTokenByOtpInput {
+export class CreateOtpDto {
   @Field()
   @IsNotEmpty()
   @IsString()
-  username: string;
+  subjectType: string;
 
   @Field()
   @IsNotEmpty()
   @IsString()
-  otp: string;
+  subjectId: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  phoneNumber: string;
 }
