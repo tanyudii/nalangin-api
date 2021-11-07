@@ -14,7 +14,7 @@ import { User } from '../../users/entities/user.entity';
 import { Group } from './group.entity';
 
 export enum RoleType {
-  CHIEFTAIN = 'Chieftain',
+  CHIEF = 'Chief',
   VILLAGER = 'Villager',
 }
 
