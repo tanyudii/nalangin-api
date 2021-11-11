@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 
 @InputType()
 export class CreateOtpInput {
@@ -16,5 +16,6 @@ export class CreateOtpInput {
   @Field()
   @IsNotEmpty()
   @IsString()
+  @IsPhoneNumber(undefined, { message: 'phone number must be a valid format' })
   phoneNumber: string;
 }
