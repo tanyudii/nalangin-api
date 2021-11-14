@@ -1,7 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as moment from 'moment';
 
+import { durationConverter } from '../../../@common/helpers/duration.helper';
 import { isEmail } from '../../../@common/helpers/validate.helper';
 import { OtpService } from '../../../otp/services/otp.service';
 import { UsersService } from '../../../users/services/users.service';
@@ -167,10 +169,12 @@ export class TokensService {
   }
 
   generateAccessTokenExpiresAt(): Date {
-    return moment().utc().add(8, 'hours').toDate();
+    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '30d';
+    const duration = durationConverter(jwtExpiresIn);
+    return moment().utc().add(duration, 'seconds').toDate();
   }
 
   generateRefreshTokenExpiresAt(): Date {
-    return moment().utc().add(30, 'days').toDate();
+    return moment().utc().add(1, 'years').toDate();
   }
 }
