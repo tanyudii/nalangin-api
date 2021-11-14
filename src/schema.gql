@@ -140,6 +140,7 @@ type Query {
   payment(id: String!): Payment!
   groups: [Group!]!
   group(id: String!): Group!
+  myProfile: Profile!
 }
 
 type Mutation {
@@ -164,7 +165,6 @@ type Mutation {
   exitGroup(id: String!): Group!
   inviteGroupUser(inviteGroupUserInput: InviteGroupUserInput!): Group!
   removeGroupUser(removeGroupUserInput: RemoveGroupUserInput!): Group!
-  myProfile: Profile!
 }
 
 input CreateTokenInput {
