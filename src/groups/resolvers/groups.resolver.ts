@@ -20,6 +20,9 @@ import { GroupUser } from '../entities/group-user.entity';
 import { Group } from '../entities/group.entity';
 import { GroupsLoader } from '../loaders/groups.loader';
 import { GroupsService } from '../services/groups.service';
+import { GroupResource } from '../resources/group.resource';
+import { PaginationArg } from '../../@common/graphql/args/pagination.arg';
+import { GroupCollection } from '../resources/group.collection';
 
 @Resolver(() => Group)
 export class GroupsResolver {
@@ -29,84 +32,100 @@ export class GroupsResolver {
   ) {}
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Group)
+  @Mutation(() => GroupResource)
   async createGroup(
     @GqlCurrentUser() user: IUser,
     @Args('createGroupInput') createGroupInput: CreateGroupInput,
-  ): Promise<Group> {
-    return this.groupsService.create(user.id, createGroupInput);
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.create(user.id, createGroupInput);
+    return new GroupResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => [Group], { name: 'groups' })
-  async findAll(@GqlCurrentUser() user: IUser): Promise<Group[]> {
-    return this.groupsService.findAll(user.id);
+  @Query(() => GroupCollection, { name: 'groups' })
+  async findAll(
+    @GqlCurrentUser() user: IUser,
+    @Args() paginationArg: PaginationArg,
+  ): Promise<GroupCollection> {
+    const { limit, page } = paginationArg;
+    const { items: data, meta } = await this.groupsService.findAllPagination(
+      user.id,
+      { limit, page },
+    );
+
+    return new GroupCollection({ data, meta });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => Group, { name: 'group' })
+  @Query(() => GroupResource, { name: 'group' })
   async findOne(
     @GqlCurrentUser() user: IUser,
     @Args('id') id: string,
-  ): Promise<Group> {
-    return this.groupsService.findOne(user.id, id);
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.findOne(user.id, id);
+    return new GroupResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Group)
+  @Mutation(() => GroupResource)
   async updateGroup(
     @GqlCurrentUser() user: IUser,
     @Args('updateGroupInput') updateGroupInput: UpdateGroupInput,
-  ): Promise<Group> {
-    return this.groupsService.update(
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.update(
       user.id,
       updateGroupInput.id,
       updateGroupInput,
     );
+    return new GroupResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Group)
+  @Mutation(() => GroupResource)
   async removeGroup(
     @GqlCurrentUser() user: IUser,
     @Args('id') id: string,
-  ): Promise<Group> {
-    return this.groupsService.remove(user.id, id);
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.remove(user.id, id);
+    return new GroupResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Group)
+  @Mutation(() => GroupResource)
   async exitGroup(
     @GqlCurrentUser() user: IUser,
     @Args('id') id: string,
-  ): Promise<Group> {
-    return this.groupsService.exit(user.id, id);
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.exit(user.id, id);
+    return new GroupResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Group)
+  @Mutation(() => GroupResource)
   async inviteGroupUser(
     @GqlCurrentUser() user: IUser,
     @Args('inviteGroupUserInput') inviteGroupUserInput: InviteGroupUserInput,
-  ): Promise<Group> {
-    return this.groupsService.inviteGroupUser(
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.inviteGroupUser(
       user.id,
       inviteGroupUserInput.id,
       inviteGroupUserInput,
     );
+    return new GroupResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Group)
+  @Mutation(() => GroupResource)
   async removeGroupUser(
     @GqlCurrentUser() user: IUser,
     @Args('removeGroupUserInput') removeGroupUserInput: RemoveGroupUserInput,
-  ): Promise<Group> {
-    return this.groupsService.removeGroupUser(
+  ): Promise<GroupResource> {
+    const data = await this.groupsService.removeGroupUser(
       user.id,
       removeGroupUserInput.id,
       removeGroupUserInput,
     );
+    return new GroupResource({ data });
   }
 
   @ResolveField('users', () => [User])

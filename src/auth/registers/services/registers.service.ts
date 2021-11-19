@@ -15,7 +15,7 @@ export class RegistersService {
   ) {}
 
   async register(registerInput: RegisterInput): Promise<DefaultMessage> {
-    const { name, phoneNumber, otp } = registerInput;
+    const { name, phoneNumber, otp, email, password } = registerInput;
 
     const isValidOtp = await this.otpService.isValidExpiry(
       otpSubjectTypeName,
@@ -31,6 +31,8 @@ export class RegistersService {
     await this.usersService.create({
       name,
       phoneNumber,
+      email,
+      password,
     });
 
     await this.otpService.revoke(

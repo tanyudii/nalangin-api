@@ -61,7 +61,7 @@ export class TokensService {
     if (isOtp) {
       const isValidOtp = await this.otpService.isValidExpiry(
         otpSubjectTypeName,
-        username,
+        user.id,
         username,
         password,
       );
@@ -72,7 +72,7 @@ export class TokensService {
 
       await this.otpService.revoke(
         otpSubjectTypeName,
-        username,
+        user.id,
         username,
         password,
       );

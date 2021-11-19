@@ -12,6 +12,11 @@ import { RoleType } from '../entities/group-user.entity';
 import { Group } from '../entities/group.entity';
 import { GroupUserRepository } from '../repositories/group-user.repository';
 import { GroupRepository } from '../repositories/group.repository';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class GroupsService {
@@ -22,6 +27,17 @@ export class GroupsService {
 
   async findAll(userId: string): Promise<Group[]> {
     return this.groupRepository.my(userId, 'groups').getMany();
+  }
+
+  async findAllPagination(
+    userId: string,
+    options: IPaginationOptions,
+  ): Promise<Pagination<Group>> {
+    const queryBuilder = this.groupRepository
+      .my(userId, 'groups')
+      .orderBy('groups.createdAt', 'DESC');
+
+    return paginate<Group>(queryBuilder, options);
   }
 
   async findOne(userId: string, id: string): Promise<Group> {

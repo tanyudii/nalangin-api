@@ -18,6 +18,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DefaultObject {
+  id: String!
+  name: String!
+}
+
 type DefaultMessage {
   message: String!
 }
@@ -54,6 +59,23 @@ type GroupUser {
   deletedAt: DateTime
   group: Group!
   user: User
+}
+
+type GroupResource {
+  data: Group!
+}
+
+type PaginationMeta {
+  itemCount: Int!
+  totalItems: Int
+  itemsPerPage: Int!
+  totalPages: Int
+  currentPage: Int!
+}
+
+type GroupCollection {
+  data: [Group!]!
+  meta: PaginationMeta!
 }
 
 type Shopping {
@@ -132,14 +154,16 @@ type UserBank {
 }
 
 type Query {
+  getUserIDByPhoneNumber(phoneNumber: String!): DefaultObject!
+  getUserIDByEmail(email: String!): DefaultObject!
   userBanks: [UserBank!]!
   userBank(id: String!): UserBank!
   shoppings: [Shopping!]!
   shopping(id: String!): Shopping!
   payments: [Payment!]!
   payment(id: String!): Payment!
-  groups: [Group!]!
-  group(id: String!): Group!
+  groups(limit: Int = 25, page: Int = 1): GroupCollection!
+  group(id: String!): GroupResource!
   myProfile: Profile!
 }
 
@@ -159,12 +183,12 @@ type Mutation {
   createPayment(createPaymentInput: CreatePaymentInput!): Payment!
   updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   removePayment(id: String!): Payment!
-  createGroup(createGroupInput: CreateGroupInput!): Group!
-  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
-  removeGroup(id: String!): Group!
-  exitGroup(id: String!): Group!
-  inviteGroupUser(inviteGroupUserInput: InviteGroupUserInput!): Group!
-  removeGroupUser(removeGroupUserInput: RemoveGroupUserInput!): Group!
+  createGroup(createGroupInput: CreateGroupInput!): GroupResource!
+  updateGroup(updateGroupInput: UpdateGroupInput!): GroupResource!
+  removeGroup(id: String!): GroupResource!
+  exitGroup(id: String!): GroupResource!
+  inviteGroupUser(inviteGroupUserInput: InviteGroupUserInput!): GroupResource!
+  removeGroupUser(removeGroupUserInput: RemoveGroupUserInput!): GroupResource!
 }
 
 input CreateTokenInput {
@@ -199,6 +223,8 @@ input RegisterInput {
   name: String!
   phoneNumber: String!
   otp: String!
+  email: String
+  password: String
 }
 
 input CreateUserBankInput {
