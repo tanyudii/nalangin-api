@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install NPM Dependencies
-        run: yarn install
+        run: pnpm install
       - name: Execute tests (Unit and e2e tests)
         env:
           DB_HOST: 127.0.0.1
@@ -31,4 +31,4 @@ jobs:
           DB_DATABASE: homestead
           DB_USERNAME: root
           DB_PASSWORD: secret
-        run: yarn test --forceExit --detectOpenHandles
+        run: pnpm run test
