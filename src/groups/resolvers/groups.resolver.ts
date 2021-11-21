@@ -47,12 +47,10 @@ export class GroupsResolver {
     @GqlCurrentUser() user: IUser,
     @Args() paginationArg: PaginationArg,
   ): Promise<GroupCollection> {
-    const { limit, page } = paginationArg;
     const { items: data, meta } = await this.groupsService.findAllPagination(
       user.id,
-      { limit, page },
+      paginationArg,
     );
-
     return new GroupCollection({ data, meta });
   }
 

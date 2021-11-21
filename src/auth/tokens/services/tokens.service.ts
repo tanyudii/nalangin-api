@@ -12,7 +12,7 @@ import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entity
 import { RefreshTokensService } from '../../refresh-tokens/services/refresh-tokens.service';
 import { CreateTokenInput } from '../dto/create-token.input';
 import { RefreshTokenInput } from '../dto/refresh-token.input';
-import { TokenResponse } from '../types/token-response.type';
+import { TokenResponse } from '../types/token.type';
 
 const otpSubjectTypeName = 'create_token';
 
@@ -161,6 +161,9 @@ export class TokensService {
           jwtid: refreshToken.id,
           subject: accessToken.userId,
         },
+      );
+      token.refreshTokenExpiresAt = Math.round(
+        refreshToken.expiresAt.valueOf() / 1000,
       );
     }
 

@@ -1,9 +1,9 @@
 import { Resource } from './resource.type';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { DefaultName } from './default-name.type';
+import { DefaultObject } from './default-object.type';
 
 @ObjectType()
-export class DefaultNameResource extends Resource<DefaultNameResource> {
-  @Field(() => DefaultName)
-  data: DefaultName;
+export class DefaultObjectResource extends Resource<DefaultObjectResource> {
+  @Field(() => DefaultObject)
+  data: DefaultObject;
 }

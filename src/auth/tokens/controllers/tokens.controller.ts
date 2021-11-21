@@ -4,7 +4,7 @@ import { ResponseData } from '../../../@common/interfaces/response-data.interfac
 import { CreateTokenInput } from '../dto/create-token.input';
 import { RefreshTokenInput } from '../dto/refresh-token.input';
 import { TokensService } from '../services/tokens.service';
-import { TokenResponse } from '../types/token-response.type';
+import { TokenResponse } from '../types/token.type';
 
 @Controller('tokens')
 export class TokensController {

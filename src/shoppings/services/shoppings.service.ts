@@ -9,6 +9,11 @@ import { UpdateShoppingInput } from '../dto/update-shopping.input';
 import { Shopping } from '../entities/shopping.entity';
 import { ShoppingItemRepository } from '../repositories/shopping-item.repository';
 import { ShoppingRepository } from '../repositories/shopping.repository';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ShoppingsService {
@@ -18,7 +23,18 @@ export class ShoppingsService {
   ) {}
 
   async findAll(userId: string): Promise<Shopping[]> {
-    return this.shoppingRepository.find({ userId });
+    return this.shoppingRepository.my(userId, 'shoppings').getMany();
+  }
+
+  async findAllPagination(
+    userId: string,
+    options: IPaginationOptions,
+  ): Promise<Pagination<Shopping>> {
+    const queryBuilder = this.shoppingRepository
+      .my(userId, 'shoppings')
+      .orderBy('shoppings.createdAt', 'DESC');
+
+    return paginate<Shopping>(queryBuilder, options);
   }
 
   async findOne(userId: string, id: string): Promise<Shopping> {

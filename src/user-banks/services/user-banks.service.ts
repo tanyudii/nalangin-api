@@ -4,13 +4,29 @@ import { CreateUserBankInput } from '../dto/create-user-bank.input';
 import { UpdateUserBankInput } from '../dto/update-user-bank.input';
 import { UserBank } from '../entities/user-bank.entity';
 import { UserBankRepository } from '../repositories/user-bank.repository';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class UserBanksService {
   constructor(private readonly userBankRepository: UserBankRepository) {}
 
   async findAll(userId: string): Promise<UserBank[]> {
-    return this.userBankRepository.find({ userId });
+    return this.userBankRepository.my(userId, 'userBanks').getMany();
+  }
+
+  async findAllPagination(
+    userId: string,
+    options: IPaginationOptions,
+  ): Promise<Pagination<UserBank>> {
+    const queryBuilder = this.userBankRepository
+      .my(userId, 'userBanks')
+      .orderBy('userBanks.createdAt', 'DESC');
+
+    return paginate<UserBank>(queryBuilder, options);
   }
 
   async findOne(userId: string, id: string): Promise<UserBank> {

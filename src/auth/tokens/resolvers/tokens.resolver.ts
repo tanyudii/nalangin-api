@@ -3,24 +3,26 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CreateTokenInput } from '../dto/create-token.input';
 import { RefreshTokenInput } from '../dto/refresh-token.input';
 import { TokensService } from '../services/tokens.service';
-import { TokenResponse } from '../types/token-response.type';
+import { TokenResource } from '../resources/token.resource';
 
 @Resolver()
 export class TokensResolver {
   constructor(private readonly tokensService: TokensService) {}
 
-  @Mutation(() => TokenResponse)
+  @Mutation(() => TokenResource)
   async createToken(
     @Args('createTokenInput') createTokenInput: CreateTokenInput,
-  ): Promise<TokenResponse> {
-    return this.tokensService.createToken(createTokenInput);
+  ): Promise<TokenResource> {
+    const data = await this.tokensService.createToken(createTokenInput);
+    return new TokenResource({ data });
   }
 
-  @Mutation(() => TokenResponse)
+  @Mutation(() => TokenResource)
   async refreshToken(
     @Args('refreshTokenInput')
     refreshTokenInput: RefreshTokenInput,
-  ): Promise<TokenResponse> {
-    return this.tokensService.refreshToken(refreshTokenInput);
+  ): Promise<TokenResource> {
+    const data = await this.tokensService.refreshToken(refreshTokenInput);
+    return new TokenResource({ data });
   }
 }

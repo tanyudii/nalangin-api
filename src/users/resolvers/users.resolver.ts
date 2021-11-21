@@ -1,22 +1,24 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-
-import { DefaultObject } from '../../@common/graphql/types/default-object.type';
-import { User } from '../entities/user.entity';
 import { UsersService } from '../services/users.service';
+import { DefaultObjectResource } from '../../@common/graphql/types/default-object-resource.type';
 
 @Resolver()
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(() => DefaultObject)
+  @Query(() => DefaultObjectResource)
   async getUserIDByPhoneNumber(
     @Args('phoneNumber') phoneNumber: string,
-  ): Promise<User> {
-    return this.usersService.findOneByPhoneNumber(phoneNumber);
+  ): Promise<DefaultObjectResource> {
+    const data = await this.usersService.findOneByPhoneNumber(phoneNumber);
+    return new DefaultObjectResource({ data });
   }
 
-  @Query(() => DefaultObject)
-  async getUserIDByEmail(@Args('email') email: string): Promise<User> {
-    return this.usersService.findOneByEmail(email);
+  @Query(() => DefaultObjectResource)
+  async getUserIDByEmail(
+    @Args('email') email: string,
+  ): Promise<DefaultObjectResource> {
+    const data = await this.usersService.findOneByEmail(email);
+    return new DefaultObjectResource({ data });
   }
 }

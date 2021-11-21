@@ -18,8 +18,11 @@ import { ShoppingItem } from '../entities/shopping-item.entity';
 import { Shopping } from '../entities/shopping.entity';
 import { ShoppingsLoader } from '../loaders/shoppings.loader';
 import { ShoppingsService } from '../services/shoppings.service';
+import { ShoppingResource } from '../resources/shopping.resource';
+import { ShoppingCollection } from '../resources/shopping.collection';
+import { PaginationArg } from '../../@common/graphql/args/pagination.arg';
 
-@Resolver(() => Shopping)
+@Resolver(() => ShoppingResource)
 export class ShoppingsResolver {
   constructor(
     private readonly shoppingsService: ShoppingsService,
@@ -27,49 +30,63 @@ export class ShoppingsResolver {
   ) {}
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Shopping)
+  @Mutation(() => ShoppingResource)
   async createShopping(
     @GqlCurrentUser() currentUser: IUser,
     @Args('createShoppingInput') createShoppingInput: CreateShoppingInput,
-  ): Promise<Shopping> {
-    return this.shoppingsService.create(currentUser.id, createShoppingInput);
+  ): Promise<ShoppingResource> {
+    const data = await this.shoppingsService.create(
+      currentUser.id,
+      createShoppingInput,
+    );
+    return new ShoppingResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => [Shopping], { name: 'shoppings' })
-  async findAll(@GqlCurrentUser() currentUser: IUser): Promise<Shopping[]> {
-    return this.shoppingsService.findAll(currentUser.id);
+  @Query(() => ShoppingCollection, { name: 'shoppings' })
+  async findAll(
+    @GqlCurrentUser() currentUser: IUser,
+    @Args() paginationArg: PaginationArg,
+  ): Promise<ShoppingCollection> {
+    const { items: data, meta } = await this.shoppingsService.findAllPagination(
+      currentUser.id,
+      paginationArg,
+    );
+    return new ShoppingCollection({ data, meta });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => Shopping, { name: 'shopping' })
+  @Query(() => ShoppingResource, { name: 'shopping' })
   async findOne(
     @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
-  ): Promise<Shopping> {
-    return this.shoppingsService.findOne(currentUser.id, id);
+  ): Promise<ShoppingResource> {
+    const data = await this.shoppingsService.findOne(currentUser.id, id);
+    return new ShoppingResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Shopping)
+  @Mutation(() => ShoppingResource)
   async updateShopping(
     @GqlCurrentUser() currentUser: IUser,
     @Args('updateShoppingInput') updateShoppingInput: UpdateShoppingInput,
-  ): Promise<Shopping> {
-    return this.shoppingsService.update(
+  ): Promise<ShoppingResource> {
+    const data = await this.shoppingsService.update(
       currentUser.id,
       updateShoppingInput.id,
       updateShoppingInput,
     );
+    return new ShoppingResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Shopping)
+  @Mutation(() => ShoppingResource)
   async removeShopping(
     @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
-  ): Promise<Shopping> {
-    return this.shoppingsService.remove(currentUser.id, id);
+  ): Promise<ShoppingResource> {
+    const data = await this.shoppingsService.remove(currentUser.id, id);
+    return new ShoppingResource({ data });
   }
 
   @ResolveField('user', () => User)

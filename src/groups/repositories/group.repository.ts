@@ -8,7 +8,7 @@ import { Group } from '../entities/group.entity';
 export class GroupRepository extends Repository<Group> {
   my(
     userId: string,
-    alias?: string,
+    alias: string,
     queryRunner?: QueryRunner,
   ): SelectQueryBuilder<Group> {
     return this.createQueryBuilder(alias, queryRunner)

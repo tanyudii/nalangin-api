@@ -18,6 +18,9 @@ import { PaymentItem } from '../entities/payment-item.entity';
 import { Payment } from '../entities/payment.entity';
 import { PaymentsLoader } from '../loaders/payments.loader';
 import { PaymentsService } from '../services/payments.service';
+import { PaymentCollection } from '../resources/payment.collection';
+import { PaymentResource } from '../resources/payment.resource';
+import { PaginationArg } from '../../@common/graphql/args/pagination.arg';
 
 @Resolver(() => Payment)
 export class PaymentsResolver {
@@ -27,43 +30,60 @@ export class PaymentsResolver {
   ) {}
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Payment)
+  @Mutation(() => PaymentResource)
   async createPayment(
     @GqlCurrentUser() user: IUser,
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
-  ): Promise<Payment> {
-    return this.paymentsService.create(user.id, createPaymentInput);
+  ): Promise<PaymentResource> {
+    const data = await this.paymentsService.create(user.id, createPaymentInput);
+    return new PaymentResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => [Payment], { name: 'payments' })
-  findAll(@GqlCurrentUser() user: IUser) {
-    return this.paymentsService.findAll(user.id);
+  @Query(() => PaymentCollection, { name: 'payments' })
+  async findAll(
+    @GqlCurrentUser() user: IUser,
+    @Args() paginationArg: PaginationArg,
+  ): Promise<PaymentCollection> {
+    const { items: data, meta } = await this.paymentsService.findAllPagination(
+      user.id,
+      paginationArg,
+    );
+    return new PaymentCollection({ data, meta });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => Payment, { name: 'payment' })
-  findOne(@GqlCurrentUser() user: IUser, @Args('id') id: string) {
-    return this.paymentsService.findOne(user.id, id);
+  @Query(() => PaymentResource, { name: 'payment' })
+  async findOne(
+    @GqlCurrentUser() user: IUser,
+    @Args('id') id: string,
+  ): Promise<PaymentResource> {
+    const data = await this.paymentsService.findOne(user.id, id);
+    return new PaymentResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Payment)
-  updatePayment(
+  @Mutation(() => PaymentResource)
+  async updatePayment(
     @GqlCurrentUser() user: IUser,
     @Args('updatePaymentInput') updatePaymentInput: UpdatePaymentInput,
-  ) {
-    return this.paymentsService.update(
+  ): Promise<PaymentResource> {
+    const data = await this.paymentsService.update(
       user.id,
       updatePaymentInput.id,
       updatePaymentInput,
     );
+    return new PaymentResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => Payment)
-  removePayment(@GqlCurrentUser() user: IUser, @Args('id') id: string) {
-    return this.paymentsService.remove(user.id, id);
+  @Mutation(() => PaymentResource)
+  async removePayment(
+    @GqlCurrentUser() user: IUser,
+    @Args('id') id: string,
+  ): Promise<PaymentResource> {
+    const data = await this.paymentsService.remove(user.id, id);
+    return new PaymentResource({ data });
   }
 
   @ResolveField('user', () => User)

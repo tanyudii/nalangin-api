@@ -6,56 +6,73 @@ import { JwtGqlGuard } from '../../@common/guards/jwt-gql.guard';
 import { IUser } from '../../@common/interfaces/user.interface';
 import { CreateUserBankInput } from '../dto/create-user-bank.input';
 import { UpdateUserBankInput } from '../dto/update-user-bank.input';
-import { UserBank } from '../entities/user-bank.entity';
 import { UserBanksService } from '../services/user-banks.service';
+import { UserBankResource } from '../resources/user-bank.resource';
+import { UserBankCollection } from '../resources/user-bank.collection';
+import { PaginationArg } from '../../@common/graphql/args/pagination.arg';
 
-@Resolver(() => UserBank)
+@Resolver(() => UserBankResource)
 export class UserBanksResolver {
   constructor(private readonly userBanksService: UserBanksService) {}
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => UserBank)
+  @Mutation(() => UserBankResource)
   async createUserBank(
     @GqlCurrentUser() currentUser: IUser,
     @Args('createUserBankInput') createUserBankInput: CreateUserBankInput,
-  ): Promise<UserBank> {
-    return this.userBanksService.create(currentUser.id, createUserBankInput);
+  ): Promise<UserBankResource> {
+    const data = await this.userBanksService.create(
+      currentUser.id,
+      createUserBankInput,
+    );
+    return new UserBankResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => [UserBank], { name: 'userBanks' })
-  async findAll(@GqlCurrentUser() currentUser: IUser): Promise<UserBank[]> {
-    return this.userBanksService.findAll(currentUser.id);
+  @Query(() => UserBankCollection, { name: 'userBanks' })
+  async findAll(
+    @GqlCurrentUser() currentUser: IUser,
+    @Args() paginationArg: PaginationArg,
+  ): Promise<UserBankCollection> {
+    const { items: data, meta } = await this.userBanksService.findAllPagination(
+      currentUser.id,
+      paginationArg,
+    );
+
+    return new UserBankCollection({ data, meta });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Query(() => UserBank, { name: 'userBank' })
+  @Query(() => UserBankResource, { name: 'userBank' })
   async findOne(
     @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
-  ): Promise<UserBank> {
-    return this.userBanksService.findOne(currentUser.id, id);
+  ): Promise<UserBankResource> {
+    const data = await this.userBanksService.findOne(currentUser.id, id);
+    return new UserBankResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => UserBank)
+  @Mutation(() => UserBankResource)
   async updateUserBank(
     @GqlCurrentUser() currentUser: IUser,
     @Args('updateUserBankInput') updateUserBankInput: UpdateUserBankInput,
-  ): Promise<UserBank> {
-    return this.userBanksService.update(
+  ): Promise<UserBankResource> {
+    const data = await this.userBanksService.update(
       currentUser.id,
       updateUserBankInput.id,
       updateUserBankInput,
     );
+    return new UserBankResource({ data });
   }
 
   @UseGuards(JwtGqlGuard)
-  @Mutation(() => UserBank)
+  @Mutation(() => UserBankResource)
   async removeUserBank(
     @GqlCurrentUser() currentUser: IUser,
     @Args('id') id: string,
-  ): Promise<UserBank> {
-    return this.userBanksService.remove(currentUser.id, id);
+  ): Promise<UserBankResource> {
+    const data = await this.userBanksService.remove(currentUser.id, id);
+    return new UserBankResource({ data });
   }
 }

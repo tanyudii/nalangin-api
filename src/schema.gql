@@ -23,8 +23,16 @@ type DefaultObject {
   name: String!
 }
 
+type DefaultObjectResource {
+  data: DefaultObject!
+}
+
 type DefaultMessage {
   message: String!
+}
+
+type DefaultMessageResource {
+  data: DefaultMessage!
 }
 
 type OtpResponse {
@@ -33,10 +41,19 @@ type OtpResponse {
   availableNextAt: DateTime!
 }
 
+type OtpResource {
+  data: OtpResponse!
+}
+
 type TokenResponse {
   accessToken: String!
   expiresAt: Int!
   refreshToken: String
+  refreshTokenExpiresAt: Int
+}
+
+type TokenResource {
+  data: TokenResponse!
 }
 
 type Group {
@@ -112,6 +129,17 @@ type ShoppingItem {
   deletedAt: DateTime
 }
 
+type ShoppingResource {
+  data: Shopping!
+  user: User!
+  shoppingItems: [ShoppingItem!]!
+}
+
+type ShoppingCollection {
+  data: [Shopping!]!
+  meta: PaginationMeta!
+}
+
 type Payment {
   userId: String!
   date: String!
@@ -137,10 +165,23 @@ type PaymentItem {
   total: Float!
 }
 
+type PaymentCollection {
+  data: [Payment!]!
+  meta: PaginationMeta!
+}
+
+type PaymentResource {
+  data: Payment!
+}
+
 type Profile {
   id: String!
   name: String!
   phoneNumber: String!
+}
+
+type ProfileResource {
+  data: Profile!
 }
 
 type UserBank {
@@ -153,36 +194,45 @@ type UserBank {
   deletedAt: DateTime
 }
 
+type UserBankResource {
+  data: UserBank!
+}
+
+type UserBankCollection {
+  data: [UserBank!]!
+  meta: PaginationMeta!
+}
+
 type Query {
-  getUserIDByPhoneNumber(phoneNumber: String!): DefaultObject!
-  getUserIDByEmail(email: String!): DefaultObject!
-  userBanks: [UserBank!]!
-  userBank(id: String!): UserBank!
-  shoppings: [Shopping!]!
-  shopping(id: String!): Shopping!
-  payments: [Payment!]!
-  payment(id: String!): Payment!
+  getUserIDByPhoneNumber(phoneNumber: String!): DefaultObjectResource!
+  getUserIDByEmail(email: String!): DefaultObjectResource!
+  userBanks(limit: Int = 25, page: Int = 1): UserBankCollection!
+  userBank(id: String!): UserBankResource!
+  shoppings(limit: Int = 25, page: Int = 1): ShoppingCollection!
+  shopping(id: String!): ShoppingResource!
+  payments(limit: Int = 25, page: Int = 1): PaymentCollection!
+  payment(id: String!): PaymentResource!
   groups(limit: Int = 25, page: Int = 1): GroupCollection!
   group(id: String!): GroupResource!
-  myProfile: Profile!
+  myProfile: ProfileResource!
 }
 
 type Mutation {
-  createToken(createTokenInput: CreateTokenInput!): TokenResponse!
-  refreshToken(refreshTokenInput: RefreshTokenInput!): TokenResponse!
-  createOtp(createOtpInput: CreateOtpInput!): OtpResponse!
-  forgotPassword(forgotPasswordInput: ForgotPasswordInput!): DefaultMessage!
-  resetPassword(resetPasswordInput: ResetPasswordInput!): DefaultMessage!
-  register(registerInput: RegisterInput!): DefaultMessage!
-  createUserBank(createUserBankInput: CreateUserBankInput!): UserBank!
-  updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBank!
-  removeUserBank(id: String!): UserBank!
-  createShopping(createShoppingInput: CreateShoppingInput!): Shopping!
-  updateShopping(updateShoppingInput: UpdateShoppingInput!): Shopping!
-  removeShopping(id: String!): Shopping!
-  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
-  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
-  removePayment(id: String!): Payment!
+  createToken(createTokenInput: CreateTokenInput!): TokenResource!
+  refreshToken(refreshTokenInput: RefreshTokenInput!): TokenResource!
+  createOtp(createOtpInput: CreateOtpInput!): OtpResource!
+  forgotPassword(forgotPasswordInput: ForgotPasswordInput!): DefaultMessageResource!
+  resetPassword(resetPasswordInput: ResetPasswordInput!): DefaultMessageResource!
+  register(registerInput: RegisterInput!): DefaultMessageResource!
+  createUserBank(createUserBankInput: CreateUserBankInput!): UserBankResource!
+  updateUserBank(updateUserBankInput: UpdateUserBankInput!): UserBankResource!
+  removeUserBank(id: String!): UserBankResource!
+  createShopping(createShoppingInput: CreateShoppingInput!): ShoppingResource!
+  updateShopping(updateShoppingInput: UpdateShoppingInput!): ShoppingResource!
+  removeShopping(id: String!): ShoppingResource!
+  createPayment(createPaymentInput: CreatePaymentInput!): PaymentResource!
+  updatePayment(updatePaymentInput: UpdatePaymentInput!): PaymentResource!
+  removePayment(id: String!): PaymentResource!
   createGroup(createGroupInput: CreateGroupInput!): GroupResource!
   updateGroup(updateGroupInput: UpdateGroupInput!): GroupResource!
   removeGroup(id: String!): GroupResource!

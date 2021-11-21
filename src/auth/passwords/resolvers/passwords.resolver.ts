@@ -1,25 +1,28 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-
-import { DefaultMessage } from '../../../@common/graphql/types/default-message.type';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { ResetPasswordInput } from '../dto/reset-password.input';
 import { PasswordsService } from '../services/passwords.service';
+import { DefaultMessageResource } from '../../../@common/graphql/types/default-message-resource.type';
 
 @Resolver()
 export class PasswordsResolver {
   constructor(private readonly passwordsService: PasswordsService) {}
 
-  @Mutation(() => DefaultMessage)
+  @Mutation(() => DefaultMessageResource)
   async forgotPassword(
     @Args('forgotPasswordInput') forgotPasswordInput: ForgotPasswordInput,
-  ): Promise<DefaultMessage> {
-    return this.passwordsService.forgotPassword(forgotPasswordInput);
+  ): Promise<DefaultMessageResource> {
+    const data = await this.passwordsService.forgotPassword(
+      forgotPasswordInput,
+    );
+    return new DefaultMessageResource({ data });
   }
 
-  @Mutation(() => DefaultMessage)
+  @Mutation(() => DefaultMessageResource)
   async resetPassword(
     @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput,
-  ): Promise<DefaultMessage> {
-    return this.passwordsService.resetPassword(resetPasswordInput);
+  ): Promise<DefaultMessageResource> {
+    const data = await this.passwordsService.resetPassword(resetPasswordInput);
+    return new DefaultMessageResource({ data });
   }
 }

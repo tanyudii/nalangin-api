@@ -10,4 +10,7 @@ export class TokenResponse {
 
   @Field(() => String, { nullable: true })
   refreshToken?: string;
+
+  @Field(() => Int, { nullable: true })
+  refreshTokenExpiresAt?: number;
 }

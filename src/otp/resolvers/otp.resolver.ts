@@ -3,16 +3,17 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CreateOtpInput } from '../dtos/create-otp.input';
 import { Otp } from '../entities/otp.entity';
 import { OtpService } from '../services/otp.service';
-import { OtpResponse } from '../types/otp-response.type';
+import { OtpResource } from '../resources/otp.resource';
 
 @Resolver(() => Otp)
 export class OtpResolver {
   constructor(private readonly otpService: OtpService) {}
 
-  @Mutation(() => OtpResponse)
+  @Mutation(() => OtpResource)
   async createOtp(
     @Args('createOtpInput') createOtpInput: CreateOtpInput,
-  ): Promise<OtpResponse> {
-    return this.otpService.create(createOtpInput);
+  ): Promise<OtpResource> {
+    const data = await this.otpService.create(createOtpInput);
+    return new OtpResource({ data });
   }
 }
